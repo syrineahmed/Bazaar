@@ -37,6 +37,8 @@ public class User implements UserDetails {
     private LocalDate dateOfBirth;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     @Column(name = "phone_number")
     private String phoneNumber;
     private String pictureUrl;
