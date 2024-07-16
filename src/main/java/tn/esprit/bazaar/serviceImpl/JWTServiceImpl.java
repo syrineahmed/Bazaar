@@ -11,6 +11,7 @@ import tn.esprit.bazaar.service.JWTService;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -18,10 +19,18 @@ public class JWTServiceImpl implements JWTService {
     public String generateToken(UserDetails userDetails){
         return Jwts.builder().setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date((System.currentTimeMillis())+1000*60*24))
+                .setExpiration(new Date((System.currentTimeMillis())+1000*60*24)) //1day
                 .signWith(getSiginKey(), SignatureAlgorithm.HS256)
                 .compact();
 
+
+    }
+    public String generateRefreshToken(Map<String,Object> extractClaims, UserDetails userDetails){
+        return Jwts.builder().setClaims(extractClaims).setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date((System.currentTimeMillis())+ 604800000)) //7days
+                .signWith(getSiginKey(), SignatureAlgorithm.HS256)
+                .compact();
 
     }
     public String ExtractUserName(String token){

@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private String lastName;
     @Column(nullable = false)
     private String password;
+    private boolean enabled;
     @Column(nullable = false)
     private LocalDate dateOfBirth;
     @Enumerated(EnumType.STRING)
@@ -45,7 +46,7 @@ public class User implements UserDetails {
     private Date createdDate;
     private Date updatedDate;
     private boolean isActive;
-
+    String passwordResetToken;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -70,6 +71,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isEnabled();
+        return enabled;
     }
 }

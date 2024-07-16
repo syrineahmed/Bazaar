@@ -1,2 +1,11 @@
-package tn.esprit.bazaar.dto;public class JwtAuthenticationResponse {
+package tn.esprit.bazaar.dto;
+
+import lombok.Data;
+import tn.esprit.bazaar.entities.User;
+
+@Data
+public class JwtAuthenticationResponse {
+    private String token;
+    private String refreshToken;
+    User userDetails;
 }
