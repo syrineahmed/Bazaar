@@ -21,6 +21,6 @@ public class SignUpRequest {
     private LocalDate dateOfBirth;
     private Date createdDate;
     private Date updatedDate;
-    private boolean isActive;
+   // private boolean isActive;
 
 }

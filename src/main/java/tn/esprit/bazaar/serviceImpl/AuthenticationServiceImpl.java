@@ -14,6 +14,7 @@ import tn.esprit.bazaar.repository.UserRepository;
 import tn.esprit.bazaar.service.AuthenticationService;
 import tn.esprit.bazaar.service.JWTService;
 
+import java.util.Date;
 import java.util.HashMap;
 
 @Service
@@ -21,11 +22,12 @@ import java.util.HashMap;
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-   private final AuthenticationManager authenticationManager;
-   private final JWTService jwtService;
+    private final AuthenticationManager authenticationManager;
+    private final JWTService jwtService;
 
 
     public User signup(SignUpRequest signUpRequest) {
+
         User user = new User();
         user.setEmail(signUpRequest.getEmail());
         user.setFirstName(signUpRequest.getFirstName());
@@ -35,14 +37,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRole((signUpRequest.getRole()));
         user.setGender((signUpRequest.getGender()));
         user.setDateOfBirth(signUpRequest.getDateOfBirth());
-        user.setCreatedDate(signUpRequest.getCreatedDate());
-        user.setUpdatedDate(signUpRequest.getUpdatedDate());
-        user.setActive(signUpRequest.isActive());
+        user.setCreatedDate(new Date());//hedhi 3leh badeltha 5ater mech user yhot date de creation mta3 compte tethat wahadha b date mta3 taw
+        user.setUpdatedDate(new Date());//wel update date b3d par exemple ki bech ya3mel modifier lel profile mte3ou tzidou stare hedha fel methode mta3 update profile
+       // user.setActive(signUpRequest.isActive());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-
+        user.setEnabled(true);
         userRepository.save(user);
 
         return user;
+
+
 
     }
 

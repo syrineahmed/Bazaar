@@ -19,7 +19,7 @@ public class JWTServiceImpl implements JWTService {
     public String generateToken(UserDetails userDetails){
         return Jwts.builder().setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date((System.currentTimeMillis())+1000*60*24)) //1day
+                .setExpiration(new Date((System.currentTimeMillis())+1000*60*24))
                 .signWith(getSiginKey(), SignatureAlgorithm.HS256)
                 .compact();
 
@@ -28,7 +28,7 @@ public class JWTServiceImpl implements JWTService {
     public String generateRefreshToken(Map<String,Object> extractClaims, UserDetails userDetails){
         return Jwts.builder().setClaims(extractClaims).setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date((System.currentTimeMillis())+ 604800000)) //7days
+                .setExpiration(new Date((System.currentTimeMillis())+ 604800000))
                 .signWith(getSiginKey(), SignatureAlgorithm.HS256)
                 .compact();
 
@@ -39,6 +39,10 @@ public class JWTServiceImpl implements JWTService {
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers){
         final Claims claims= extractAllClaims(token);
         return claimsResolvers.apply(claims);
+    }
+    private Key getSiginKey(){
+        byte[] key = Decoders.BASE64.decode("413F4428472B4B6250655368566D5970337336763979244226452948404D6351");
+        return Keys.hmacShaKeyFor(key);
     }
     private Claims extractAllClaims(String token){
         return Jwts.parserBuilder().setSigningKey(getSiginKey()).build().parseClaimsJws(token).getBody();
@@ -51,13 +55,6 @@ public class JWTServiceImpl implements JWTService {
     public boolean isTokenExpired(String token){
         return extractClaim(token,Claims::getExpiration).before(new Date());
     }
-
-
-    private Key getSiginKey(){
-    byte[] key = Decoders.BASE64.decode("");
-    return Keys.hmacShaKeyFor(key);
 }
-}
-
 
 

@@ -45,8 +45,8 @@ public class User implements UserDetails {
     private String pictureUrl;
     private Date createdDate;
     private Date updatedDate;
-    private boolean isActive;
-    String passwordResetToken;
+    //private boolean isActive;
+   // String passwordResetToken;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

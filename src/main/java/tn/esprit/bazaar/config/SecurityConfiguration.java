@@ -31,12 +31,12 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req
-                                //.requestMatchers("/api/v1/auth/**").permitAll() // Autoriser les requêtes à /auth/**
+                               // .requestMatchers("/api/v1/auth/**").permitAll() // Autoriser les requêtes à /auth/**
                                 .requestMatchers("/**").permitAll() // Autoriser les requêtes à /auth/**
 
-                              //  .requestMatchers("/api/v1/admin/getall").hasAuthority("ROLE_ADMIN")
-                              //  .requestMatchers("/api/v1/auth/**").hasAuthority("ADMIN")
-                                  .requestMatchers("/api/v1/admin").hasAuthority("ROLE_ADMIN")
+                                //  .requestMatchers("/api/v1/admin/getall").hasAuthority("ROLE_ADMIN")
+                                //  .requestMatchers("/api/v1/auth/**").hasAuthority("ADMIN")
+                                .requestMatchers("/api/v1/admin").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers("/api/v1/user").hasAuthority("ROLE_USER")
 
                                 .anyRequest().authenticated()
