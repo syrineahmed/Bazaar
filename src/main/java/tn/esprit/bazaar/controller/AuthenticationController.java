@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.bazaar.dto.JwtAuthenticationResponse;
+import tn.esprit.bazaar.dto.RefreshTokenRequest;
 import tn.esprit.bazaar.dto.SignUpRequest;
 import tn.esprit.bazaar.dto.SigninRequest;
 import tn.esprit.bazaar.entities.User;
@@ -24,6 +25,11 @@ public class AuthenticationController {
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody SigninRequest signinRequest){
         return ResponseEntity.ok(authenticationService.signin( signinRequest));
+
+    }
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtAuthenticationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest){
+        return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
 
     }
 

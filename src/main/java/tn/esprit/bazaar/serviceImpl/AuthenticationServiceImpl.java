@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tn.esprit.bazaar.dto.JwtAuthenticationResponse;
+import tn.esprit.bazaar.dto.RefreshTokenRequest;
 import tn.esprit.bazaar.dto.SignUpRequest;
 import tn.esprit.bazaar.dto.SigninRequest;
 import tn.esprit.bazaar.entities.Role;
@@ -73,4 +74,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         }
 
-    }}
+
+    }
+    public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        String userEmail = jwtService.ExtractUserName(refreshTokenRequest.getToken());
+        User user = userRepository.findByEmail(userEmail).orElseThrow();
+        if (jwtService.isTokenValid(refreshTokenRequest.getToken(), user)) {
+            var jwt = jwtService.generateToken(user);
+            JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
+            jwtAuthenticationResponse.setToken(jwt);
+            jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
+            return jwtAuthenticationResponse;
+
+        }
+        return null;
+    }
+}
