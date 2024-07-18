@@ -27,6 +27,10 @@ public class UserController {
             return ResponseEntity.badRequest().body("Failed to update user");
         }
     }
+    @PutMapping("/changepassword/{idUser}/{password}")
+    public User ChangePassword(@PathVariable Long idUser, @PathVariable String  password) {
+        return userService.ChangePassword(idUser, password);
+    }
 
 
 

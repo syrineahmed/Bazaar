@@ -114,6 +114,14 @@ public class UserServiceImpl implements UserDetailsService {
         }
         return null;
     }
+
     ///user can change his password /////
+
+    public User ChangePassword (Long idUser, String password) {
+
+    User user = userRepository.findById(idUser).orElse(null);
+    user.setPassword(new BCryptPasswordEncoder().encode(password));
+    return userRepository.save(user);
+    }
 
 }

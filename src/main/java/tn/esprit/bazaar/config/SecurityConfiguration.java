@@ -44,6 +44,7 @@ public class SecurityConfiguration  {
 
                                 .requestMatchers("/api/v1/user/**").hasAuthority("ROLE_USER")
                                 .requestMatchers("/api/v1/user/updateprofile").permitAll()
+                                .requestMatchers("/api/v1/user/changepassword/**/**/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
