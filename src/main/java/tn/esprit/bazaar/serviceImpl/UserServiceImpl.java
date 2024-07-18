@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tn.esprit.bazaar.entities.Role;
 import tn.esprit.bazaar.entities.User;
@@ -14,8 +16,9 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+/*public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     public UserDetailsService userDetailsService() {
@@ -27,6 +30,17 @@ public class UserServiceImpl implements UserService {
             }
         };
 
+
+
+    }*/
+public class UserServiceImpl implements UserDetailsService {
+    private final UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+        return user;
     }
 
     ///////// list of users  (admin) ///////////////////+
@@ -58,21 +72,21 @@ public class UserServiceImpl implements UserService {
     }
 
     ///admin can get user by email //////
-    @Override
+    //@Override
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
 
     ///admin can get user by id //////
-    @Override
+    //@Override
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
     }
 
     ///admin can search for users /////
-    @Override
+   // @Override
     public List<User> searchUsers(String searchTerm) {
         if (searchTerm == null || searchTerm.isEmpty()) {
             return userRepository.findAll();
@@ -80,4 +94,26 @@ public class UserServiceImpl implements UserService {
             return userRepository.searchByTerm(searchTerm);
         }
     }
+    ///user can update his profile /////
+   // @Override
+
+    public User updateUser(User user) {
+        if (user.getId() != null) {
+            User existingUser = userRepository.findById(user.getId()).orElse(null);
+            if (existingUser != null) {
+
+                existingUser.setFirstName(user.getFirstName());
+                existingUser.setLastName(user.getLastName());
+                existingUser.setEmail(user.getEmail());
+                existingUser.setDateOfBirth(user.getDateOfBirth());
+                existingUser.setPhoneNumber(user.getPhoneNumber());
+                existingUser.setPictureUrl(user.getPictureUrl());
+
+                return userRepository.save(existingUser);
+            }
+        }
+        return null;
+    }
+    ///user can change his password /////
+
 }

@@ -18,11 +18,11 @@ import java.util.List;
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
 public class AdminCotnroller {
-    @Autowired
- UserServiceImpl userServiceImpl;
+   // @Autowired
+ //UserServiceImpl userServiceImpl;
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
     //testing
     @GetMapping
     public ResponseEntity<String>  sayHello() {
@@ -30,7 +30,7 @@ public class AdminCotnroller {
     }
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userServiceImpl.getAllUsers();
+        List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
     @DeleteMapping("/users/{id}")
@@ -46,7 +46,7 @@ public class AdminCotnroller {
     @PutMapping("/users/{email}/role")
     public ResponseEntity<?> updateUserRole(@PathVariable String email, @RequestParam String newRole) {
         try {
-            userServiceImpl.updateUserRole(email, Role.valueOf(newRole));
+            userService.updateUserRole(email, Role.valueOf(newRole));
             return ResponseEntity.ok().body(new MessageResponse("User role updated successfully"));
         } catch (RuntimeException ex) {
             return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
@@ -64,7 +64,7 @@ public class AdminCotnroller {
     }
     @GetMapping("/users/search")
     public ResponseEntity<List<User>> searchUsers(@RequestParam(required = false) String searchTerm) {
-        List<User> users = userServiceImpl.searchUsers(searchTerm);
+        List<User> users = userService.searchUsers(searchTerm);
         return ResponseEntity.ok(users);
     }
 

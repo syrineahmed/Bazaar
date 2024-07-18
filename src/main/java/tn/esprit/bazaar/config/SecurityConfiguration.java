@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,7 +25,8 @@ import tn.esprit.bazaar.service.UserService;
 @RequiredArgsConstructor
 public class SecurityConfiguration  {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserService userService;
+    //private final UserService userService;
+    private final UserDetailsService userDetailsService;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -32,7 +34,7 @@ public class SecurityConfiguration  {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req
-                               // .requestMatchers("/api/v1/auth/**").permitAll() // Autoriser les requêtes à /auth/**
+                                // .requestMatchers("/api/v1/auth/**").permitAll() // Autoriser les requêtes à /auth/**
                                 .requestMatchers("/**").permitAll() // Autoriser les requêtes à /auth/**
 
                                 //  .requestMatchers("/api/v1/admin/getall").hasAuthority("ROLE_ADMIN")
@@ -41,7 +43,7 @@ public class SecurityConfiguration  {
                                 .requestMatchers("/api/v1/admin/users/search").permitAll()
 
                                 .requestMatchers("/api/v1/user/**").hasAuthority("ROLE_USER")
-
+                                .requestMatchers("/api/v1/user/updateprofile").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -54,7 +56,9 @@ public class SecurityConfiguration  {
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userService.userDetailsService());
+        //authenticationProvider.setUserDetailsService(userService.userDetailsService());
+        authenticationProvider.setUserDetailsService(userDetailsService);
+
         authenticationProvider.setPasswordEncoder((passwordEncoder()));
         return authenticationProvider;
     }
