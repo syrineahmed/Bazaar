@@ -18,10 +18,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import tn.esprit.bazaar.entities.Role;
 import tn.esprit.bazaar.service.UserService;
 
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfiguration {
+public class SecurityConfiguration  {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserService userService;
     @Bean
@@ -36,8 +37,10 @@ public class SecurityConfiguration {
 
                                 //  .requestMatchers("/api/v1/admin/getall").hasAuthority("ROLE_ADMIN")
                                 //  .requestMatchers("/api/v1/auth/**").hasAuthority("ADMIN")
-                                .requestMatchers("/api/v1/admin").hasAuthority("ROLE_ADMIN")
-                                .requestMatchers("/api/v1/user").hasAuthority("ROLE_USER")
+                                .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
+                                .requestMatchers("/api/v1/admin/users/search").permitAll()
+
+                                .requestMatchers("/api/v1/user/**").hasAuthority("ROLE_USER")
 
                                 .anyRequest().authenticated()
                 )

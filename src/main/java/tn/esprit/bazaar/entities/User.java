@@ -19,10 +19,12 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
+@Getter
+@Setter
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Email
     @NotBlank
     @Column(unique = true, nullable = false)
@@ -56,6 +58,13 @@ public class User implements UserDetails {
     public String getUsername() {
         return email;
     }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -73,4 +82,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
 }

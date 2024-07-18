@@ -76,6 +76,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     }
+    private User convertToUserDto(User user) {
+        User dto = new User();
+        dto.setId(user.getId());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setEmail(user.getEmail());
+        dto.setPassword(user.getPassword());
+        dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setRole(user.getRole());
+        return dto;
+    }
     public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         String userEmail = jwtService.ExtractUserName(refreshTokenRequest.getToken());
         User user = userRepository.findByEmail(userEmail).orElseThrow();

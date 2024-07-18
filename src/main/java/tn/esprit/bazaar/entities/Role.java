@@ -1,5 +1,5 @@
 package tn.esprit.bazaar.entities;
 
 public enum Role {
-    USER, ADMIN
+    USER, ADMIN,EMPLOYEE,COMPANY
 }
