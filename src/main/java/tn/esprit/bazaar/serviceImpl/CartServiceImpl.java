@@ -34,11 +34,9 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto) {
-        // Obtain the currently authenticated user
         User currentUser = userServiceImpl.getCurrentUser();
         Long currentUserId = currentUser.getId();
 
-        // Use the currentUserId instead of getting it from addProductInCartDto
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(currentUserId, OrderStatus.PENDING);
         Optional<CartItem> optionalCartItem = cartItemRepository.findByProductIdAndOrderIdAndUserId(addProductInCartDto.getProductId(), activeOrder.getId(), currentUserId);
 
@@ -67,9 +65,7 @@ public class CartServiceImpl implements CartService {
             }
         }
 
-// After adding/updating the cart item
 
-// Recalculate the total amount and amount for the order
         double totalAmount = 0;
         double amount = 0;
         for (CartItem ci : activeOrder.getCartItems()) {
@@ -79,11 +75,10 @@ public class CartServiceImpl implements CartService {
             totalAmount += itemTotal;
         }
 
-// Update the order's totalAmount and amount
+
         activeOrder.setTotalAmount(Math.round(totalAmount));
         activeOrder.setAmount(Math.round(amount)); // Ensure this method exists and is correctly implemented in the Order entity
 
-// Save the updated order
         orderRepository.save(activeOrder);
 
         return ResponseEntity.ok().body("Product added to cart successfully");    }
