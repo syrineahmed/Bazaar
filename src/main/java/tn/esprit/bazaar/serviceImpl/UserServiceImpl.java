@@ -2,6 +2,10 @@ package tn.esprit.bazaar.serviceImpl;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -122,6 +126,29 @@ public class UserServiceImpl implements UserDetailsService {
     User user = userRepository.findById(idUser).orElse(null);
     user.setPassword(new BCryptPasswordEncoder().encode(password));
     return userRepository.save(user);
+    }
+
+    //////get current user /////
+    public static UserDetails build(User user) {
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().name()));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                user.isEnabled(),
+                true,
+                true,
+                true,
+                authorities);
+    }
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return userRepository.findByEmail(userDetails.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userDetails.getUsername()));
+        }
+        throw new IllegalStateException("No authenticated user found");
     }
 
 }

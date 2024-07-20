@@ -13,7 +13,7 @@ import tn.esprit.bazaar.serviceImpl.UserServiceImpl;
 @RequiredArgsConstructor
 public class UserController {
     private final UserServiceImpl userService;
-
+//testing
     @GetMapping
     public ResponseEntity<String> sayHello() {
         return ResponseEntity.ok("Hello user");
@@ -31,6 +31,14 @@ public class UserController {
     public User ChangePassword(@PathVariable Long idUser, @PathVariable String  password) {
         return userService.ChangePassword(idUser, password);
     }
+
+    @GetMapping("/profile")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<User> getCurrentUserProfile() {
+        User currentUser = userService.getCurrentUser();
+        return ResponseEntity.ok(currentUser);
+    }
+
 
 
 
