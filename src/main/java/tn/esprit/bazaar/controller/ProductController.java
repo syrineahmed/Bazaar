@@ -38,4 +38,20 @@ public class ProductController {
         List<ProductDto> productDtos = productService.getAllProducts();
         return ResponseEntity.ok(productDtos);
     }
+
+    @GetMapping("/searchbyname/{name}")
+
+    public ResponseEntity<List<ProductDto>> getAllProductsByName(@PathVariable String name) {
+        List<ProductDto> productDtos = productService.getAllProductByName(name);
+        return ResponseEntity.ok(productDtos);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        boolean deleted = productService.deleteProduct(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

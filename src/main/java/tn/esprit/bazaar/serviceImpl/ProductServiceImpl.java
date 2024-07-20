@@ -11,6 +11,7 @@ import tn.esprit.bazaar.service.ProductService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final CategoryRepository categoryRepository;
 
-    // In ProductServiceImpl.java
+
     public ProductDto addProduct(ProductDto productDto) throws IOException {
         Product product = new Product();
         product.setName(productDto.getName());
@@ -36,8 +37,24 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = porductRepository.save(product);
         return savedProduct.getDto();
     }
+
     public List<ProductDto> getAllProducts(){
         List<Product> products = porductRepository.findAll();
         return products.stream().map(Product::getDto).toList();
+    }
+
+    public List<ProductDto> getAllProductByName(String name){
+        List<Product> products = porductRepository.findAllByNameContaining(name);
+        return products.stream().map(Product::getDto).toList();
+    }
+
+    public boolean deleteProduct(Long id) {
+        Optional<Product> product = porductRepository.findById(id);
+        if (product.isPresent()) {
+            porductRepository.deleteById(id);
+            return true;
+        }
+        return false;
+
     }
 }
