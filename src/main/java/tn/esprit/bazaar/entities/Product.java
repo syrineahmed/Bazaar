@@ -23,11 +23,16 @@ public class Product {
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] image;
-    @ManyToOne(fetch = FetchType.LAZY , optional = false)
+    @ManyToOne(fetch = FetchType.LAZY , optional = false )
     @JoinColumn(name = "category_id", nullable = false)
     @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 
     public ProductDto getDto(){
         ProductDto productDto = new ProductDto();

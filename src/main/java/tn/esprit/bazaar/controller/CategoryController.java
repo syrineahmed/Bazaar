@@ -18,7 +18,7 @@ public class CategoryController {
 
 
 
-@PostMapping("/create")
+    @PostMapping("/create")
     public ResponseEntity<Category> createCategory(@RequestBody CategoryDto categoryDto) {
         Category category = categoryService.createcategory(categoryDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
@@ -27,5 +27,27 @@ public class CategoryController {
     public ResponseEntity<List<Category>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
+
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+        try {
+            categoryService.deleteCategory(id);
+            return ResponseEntity.ok().body("Category deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error deleting category: " + e.getMessage());
+        }
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+        try {
+            categoryService.updateCategory(id, categoryDto);
+            return ResponseEntity.ok().body("Category updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error updating category: " + e.getMessage());
+        }
+    }
+
+
 
 }

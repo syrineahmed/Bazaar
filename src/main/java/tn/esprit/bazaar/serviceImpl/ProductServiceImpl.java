@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 import tn.esprit.bazaar.dto.ProductDto;
 import tn.esprit.bazaar.entities.Category;
 import tn.esprit.bazaar.entities.Product;
+import tn.esprit.bazaar.entities.Role;
+import tn.esprit.bazaar.entities.User;
 import tn.esprit.bazaar.repository.CategoryRepository;
 import tn.esprit.bazaar.repository.PorductRepository;
+import tn.esprit.bazaar.repository.UserRepository;
 import tn.esprit.bazaar.service.ProductService;
 
 import java.io.IOException;
@@ -21,7 +24,9 @@ public class ProductServiceImpl implements ProductService {
 
     private final CategoryRepository categoryRepository;
 
+    private final UserServiceImpl userService;
 
+    //the current user can add a product
     public ProductDto addProduct(ProductDto productDto) throws IOException {
         Product product = new Product();
         product.setName(productDto.getName());
@@ -34,27 +39,63 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
         product.setCategory(category);
+        User currentUser = userService.getCurrentUser();
+        product.setUser(currentUser);
         Product savedProduct = porductRepository.save(product);
         return savedProduct.getDto();
     }
+
+    // all users can see all products
 
     public List<ProductDto> getAllProducts(){
         List<Product> products = porductRepository.findAll();
         return products.stream().map(Product::getDto).toList();
     }
 
+    //all users can search for a product by name
     public List<ProductDto> getAllProductByName(String name){
         List<Product> products = porductRepository.findAllByNameContaining(name);
         return products.stream().map(Product::getDto).toList();
     }
 
+    //the admin can delete the product
     public boolean deleteProduct(Long id) {
-        Optional<Product> product = porductRepository.findById(id);
-        if (product.isPresent()) {
-            porductRepository.deleteById(id);
-            return true;
+        User currentUser = userService.getCurrentUser();
+        if (currentUser.getRole().equals(Role.ADMIN)) {
+            Optional<Product> product = porductRepository.findById(id);
+            if (product.isPresent()) {
+                porductRepository.deleteById(id);
+                return true;
+            }
+        } else {
+            throw new IllegalStateException("Only admins can delete products.");
         }
         return false;
+    }
 
+    //the admin and the owner of the product can update the product
+    public ProductDto updateProduct(Long productId, ProductDto productDto) throws IOException {
+        User currentUser = userService.getCurrentUser();
+        Product product = porductRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        boolean isAdmin = currentUser.getRole().equals(Role.ADMIN);
+        boolean isOwner = product.getUser().getId().equals(currentUser.getId());
+
+        if (isAdmin || isOwner) {
+            product.setName(productDto.getName());
+            product.setPrice(productDto.getPrice());
+            product.setDescription(productDto.getDescription());
+            product.setQuantity(productDto.getQuantity());
+
+            Category category = categoryRepository.findById(productDto.getCategoryId())
+                    .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+            product.setCategory(category);
+
+            Product updatedProduct = porductRepository.save(product);
+            return updatedProduct.getDto();
+        } else {
+            throw new IllegalStateException("Only the admin or the user who added the product can update it.");
+        }
     }
 }

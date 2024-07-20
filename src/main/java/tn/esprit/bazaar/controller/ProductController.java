@@ -18,6 +18,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final ObjectMapper objectMapper;
+
     // In ProductController.java
     @PostMapping("/add")
     public ResponseEntity<?> addProduct(
@@ -32,6 +33,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding product: " + e.getMessage());
         }
     }
+
     @GetMapping("/all")
 
     public ResponseEntity<List<ProductDto>> getAllProducts() {
@@ -46,12 +48,38 @@ public class ProductController {
         return ResponseEntity.ok(productDtos);
     }
 
+
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        boolean deleted = productService.deleteProduct(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+        try {
+            boolean deleted = productService.deleteProduct(id);
+            if (deleted) {
+                return ResponseEntity.ok().body("Product deleted successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Product could not be deleted");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error deleting product: " + e.getMessage());
         }
-        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateProduct(
+            @PathVariable Long id,
+            @RequestParam("product") String productStr,
+            @RequestParam(value = "img", required = false) MultipartFile img) {
+        try {
+            ProductDto productDto = objectMapper.readValue(productStr, ProductDto.class);
+
+            if (img != null) {
+                productDto.setImg(img);
+            }
+
+            ProductDto updatedProduct = productService.updateProduct(id, productDto);
+
+            return ResponseEntity.ok(updatedProduct);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error updating product: " + e.getMessage());
+        }
     }
 }
