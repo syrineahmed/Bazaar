@@ -9,8 +9,11 @@ import tn.esprit.bazaar.dto.JwtAuthenticationResponse;
 import tn.esprit.bazaar.dto.RefreshTokenRequest;
 import tn.esprit.bazaar.dto.SignUpRequest;
 import tn.esprit.bazaar.dto.SigninRequest;
+import tn.esprit.bazaar.entities.Order;
+import tn.esprit.bazaar.entities.OrderStatus;
 import tn.esprit.bazaar.entities.Role;
 import tn.esprit.bazaar.entities.User;
+import tn.esprit.bazaar.repository.OrderRepository;
 import tn.esprit.bazaar.repository.UserRepository;
 import tn.esprit.bazaar.service.AuthenticationService;
 import tn.esprit.bazaar.service.JWTService;
@@ -25,6 +28,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
+    private final OrderRepository orderRepository;   ///order
 
 
     public User signup(SignUpRequest signUpRequest) {
@@ -38,13 +42,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRole((signUpRequest.getRole()));
         user.setGender((signUpRequest.getGender()));
         user.setDateOfBirth(signUpRequest.getDateOfBirth());
-        user.setCreatedDate(new Date());//hedhi 3leh badeltha 5ater mech user yhot date de creation mta3 compte tethat wahadha b date mta3 taw
-        user.setUpdatedDate(new Date());//wel update date b3d par exemple ki bech ya3mel modifier lel profile mte3ou tzidou stare hedha fel methode mta3 update profile
+        user.setCreatedDate(new Date());
+        user.setUpdatedDate(new Date());
        // user.setActive(signUpRequest.isActive());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setEnabled(true);
         userRepository.save(user);
-
+        ////when a user sign up he will have an order with status pending
+        Order order = new Order();
+        order.setAmount(0L);
+        order.setTotalAmount(0L);
+        order.setDiscount(0L);
+        order.setUser(userRepository.save(user));
+        order.setOrderStatus(OrderStatus.PENDING);
+        orderRepository.save(order);
         return user;
 
 

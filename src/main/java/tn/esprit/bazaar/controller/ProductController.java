@@ -48,6 +48,12 @@ public class ProductController {
         return ResponseEntity.ok(productDtos);
     }
 
+    @GetMapping("/searchByCategoryName")
+    public ResponseEntity<List<ProductDto>> getAllProductsByCategoryName(@RequestParam String categoryName) {
+        List<ProductDto> productDtos = productService.getAllProductsByCategoryName(categoryName);
+        return ResponseEntity.ok(productDtos);
+    }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {

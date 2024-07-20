@@ -58,6 +58,12 @@ public class ProductServiceImpl implements ProductService {
         return products.stream().map(Product::getDto).toList();
     }
 
+    //all users can search for a product by category
+    public List<ProductDto> getAllProductsByCategoryName(String categoryName) {
+        List<Product> products = porductRepository.findAllByCategoryName(categoryName);
+        return products.stream().map(Product::getDto).toList();
+    }
+
     //the admin can delete the product
     public boolean deleteProduct(Long id) {
         User currentUser = userService.getCurrentUser();
