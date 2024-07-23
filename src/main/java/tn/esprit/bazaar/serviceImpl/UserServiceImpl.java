@@ -1,4 +1,4 @@
-package tn.esprit.bazaar.serviceImpl;
+package tn.bazaar.serviceImpl;
 
 
 import lombok.RequiredArgsConstructor;
@@ -10,12 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import tn.esprit.bazaar.entities.Role;
-import tn.esprit.bazaar.entities.User;
-import tn.esprit.bazaar.repository.UserRepository;
-import tn.esprit.bazaar.service.UserService;
+import tn.bazaar.entities.User;
+import tn.bazaar.entities.Role;
+import tn.bazaar.repository.UserRepository;
+
 import java.util.*;
 
 @Service

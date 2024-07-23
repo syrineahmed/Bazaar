@@ -1,11 +1,9 @@
-package tn.esprit.bazaar.repository;
+package tn.bazaar.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import tn.esprit.bazaar.entities.Order;
-import tn.esprit.bazaar.entities.OrderStatus;
-
-import java.util.Optional;
+import tn.bazaar.entities.Order;
+import tn.bazaar.entities.OrderStatus;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long> {

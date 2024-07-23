@@ -2,9 +2,9 @@ package tn.bazaar.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import tn.bazaar.entities.Category;
+import tn.bazaar.entities.Coupon;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Long> {
-
+public interface CouponRepository extends JpaRepository<Coupon,Long> {
+    boolean existsByCode(String code);
 }

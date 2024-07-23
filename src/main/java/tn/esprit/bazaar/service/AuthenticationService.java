@@ -1,10 +1,10 @@
-package tn.esprit.bazaar.service;
+package tn.bazaar.service;
 
-import tn.esprit.bazaar.dto.JwtAuthenticationResponse;
-import tn.esprit.bazaar.dto.RefreshTokenRequest;
-import tn.esprit.bazaar.dto.SignUpRequest;
-import tn.esprit.bazaar.dto.SigninRequest;
-import tn.esprit.bazaar.entities.User;
+import tn.bazaar.dto.JwtAuthenticationResponse;
+import tn.bazaar.dto.RefreshTokenRequest;
+import tn.bazaar.dto.SigninRequest;
+import tn.bazaar.dto.SignUpRequest;
+import tn.bazaar.entities.User;
 
 public interface AuthenticationService {
     User signup(SignUpRequest signUpRequest);

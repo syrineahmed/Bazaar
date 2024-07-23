@@ -1,4 +1,4 @@
-package tn.esprit.bazaar.serviceImpl;
+package tn.bazaar.serviceImpl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,7 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import tn.esprit.bazaar.service.JWTService;
+import tn.bazaar.service.JWTService;
 
 import java.security.Key;
 import java.util.Date;

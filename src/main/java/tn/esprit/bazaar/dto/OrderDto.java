@@ -1,10 +1,7 @@
-package tn.esprit.bazaar.dto;
+package tn.bazaar.dto;
 
-import jakarta.persistence.*;
 import lombok.Data;
-import tn.esprit.bazaar.entities.CartItem;
-import tn.esprit.bazaar.entities.OrderStatus;
-import tn.esprit.bazaar.entities.User;
+import tn.bazaar.entities.OrderStatus;
 
 import java.util.Date;
 import java.util.List;

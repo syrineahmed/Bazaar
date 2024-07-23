@@ -1,12 +1,12 @@
-package tn.esprit.bazaar.controller;
+package tn.bazaar.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.bazaar.dto.CategoryDto;
-import tn.esprit.bazaar.entities.Category;
-import tn.esprit.bazaar.service.CategoryService;
+import tn.bazaar.dto.CategoryDto;
+import tn.bazaar.entities.Category;
+import tn.bazaar.service.CategoryService;
 
 import java.util.List;
 

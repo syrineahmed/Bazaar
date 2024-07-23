@@ -1,4 +1,4 @@
-package tn.esprit.bazaar.dto;
+package tn.bazaar.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

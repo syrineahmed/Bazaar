@@ -1,16 +1,15 @@
-package tn.esprit.bazaar.serviceImpl;
+package tn.bazaar.serviceImpl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import tn.esprit.bazaar.dto.ProductDto;
-import tn.esprit.bazaar.entities.Category;
-import tn.esprit.bazaar.entities.Product;
-import tn.esprit.bazaar.entities.Role;
-import tn.esprit.bazaar.entities.User;
-import tn.esprit.bazaar.repository.CategoryRepository;
-import tn.esprit.bazaar.repository.PorductRepository;
-import tn.esprit.bazaar.repository.UserRepository;
-import tn.esprit.bazaar.service.ProductService;
+import tn.bazaar.dto.ProductDto;
+import tn.bazaar.entities.Role;
+import tn.bazaar.entities.User;
+import tn.bazaar.repository.PorductRepository;
+import tn.bazaar.service.ProductService;
+import tn.bazaar.entities.Category;
+import tn.bazaar.entities.Product;
+import tn.bazaar.repository.CategoryRepository;
 
 import java.io.IOException;
 import java.util.List;

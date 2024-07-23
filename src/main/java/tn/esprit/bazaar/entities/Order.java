@@ -1,10 +1,8 @@
-package tn.esprit.bazaar.entities;
+package tn.bazaar.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.context.annotation.Primary;
 
-import java.rmi.server.UID;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;

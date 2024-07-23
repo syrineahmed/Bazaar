@@ -1,19 +1,19 @@
-package tn.esprit.bazaar.serviceImpl;
+package tn.bazaar.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import tn.esprit.bazaar.dto.AddProductInCartDto;
-import tn.esprit.bazaar.dto.CartItemDto;
-import tn.esprit.bazaar.dto.OrderDto;
-import tn.esprit.bazaar.entities.*;
-import tn.esprit.bazaar.repository.CartItemRepository;
-import tn.esprit.bazaar.repository.OrderRepository;
-import tn.esprit.bazaar.repository.PorductRepository;
-import tn.esprit.bazaar.repository.UserRepository;
-import tn.esprit.bazaar.service.CartService;
+import tn.bazaar.dto.CartItemDto;
+import tn.bazaar.dto.OrderDto;
+import tn.bazaar.entities.*;
+import tn.bazaar.repository.UserRepository;
+import tn.bazaar.service.CartService;
+import tn.bazaar.dto.AddProductInCartDto;
+import tn.bazaar.entities.*;
+import tn.bazaar.repository.CartItemRepository;
+import tn.bazaar.repository.OrderRepository;
+import tn.bazaar.repository.PorductRepository;
 
 import java.util.Collections;
 import java.util.List;

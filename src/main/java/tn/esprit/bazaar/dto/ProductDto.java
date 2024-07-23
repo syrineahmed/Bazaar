@@ -1,4 +1,4 @@
-package tn.esprit.bazaar.dto;
+package tn.bazaar.dto;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

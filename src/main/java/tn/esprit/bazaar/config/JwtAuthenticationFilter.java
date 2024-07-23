@@ -1,11 +1,10 @@
-package tn.esprit.bazaar.config;
+package tn.bazaar.config;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import tn.esprit.bazaar.service.JWTService;
-import tn.esprit.bazaar.service.UserService;
-import tn.esprit.bazaar.serviceImpl.UserServiceImpl;
+import tn.bazaar.service.JWTService;
 
 import java.io.IOException;
 

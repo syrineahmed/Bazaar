@@ -1,12 +1,10 @@
-package tn.esprit.bazaar.entities;
+package tn.bazaar.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import tn.esprit.bazaar.dto.CartItemDto;
-
-import java.util.List;
+import tn.bazaar.dto.CartItemDto;
 
 @Entity
 @Data

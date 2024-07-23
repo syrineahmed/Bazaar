@@ -1,4 +1,4 @@
-package tn.esprit.bazaar.service;
+package tn.bazaar.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

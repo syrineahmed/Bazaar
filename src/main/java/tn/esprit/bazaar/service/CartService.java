@@ -1,8 +1,8 @@
-package tn.esprit.bazaar.service;
+package tn.bazaar.service;
 
 import org.springframework.http.ResponseEntity;
-import tn.esprit.bazaar.dto.AddProductInCartDto;
-import tn.esprit.bazaar.dto.OrderDto;
+import tn.bazaar.dto.OrderDto;
+import tn.bazaar.dto.AddProductInCartDto;
 
 public interface CartService {
      ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto ) ;

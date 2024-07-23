@@ -1,9 +1,4 @@
-package tn.esprit.bazaar.service;
-
-import org.springframework.security.core.userdetails.UserDetailsService;
-import tn.esprit.bazaar.entities.User;
-
-import java.util.List;
+package tn.bazaar.service;
 
 public interface UserService {
      /*UserDetailsService userDetailsService() ;

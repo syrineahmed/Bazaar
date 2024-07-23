@@ -1,8 +1,8 @@
-package tn.esprit.bazaar.dto;
+package tn.bazaar.dto;
 
 import lombok.Data;
-import tn.esprit.bazaar.entities.Gender;
-import tn.esprit.bazaar.entities.Role;
+import tn.bazaar.entities.Gender;
+import tn.bazaar.entities.Role;
 
 import java.time.LocalDate;
 import java.util.Date;

@@ -1,12 +1,12 @@
-package tn.esprit.bazaar.controller;
+package tn.bazaar.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.bazaar.dto.AddProductInCartDto;
-import tn.esprit.bazaar.dto.OrderDto;
-import tn.esprit.bazaar.service.CartService;
+import tn.bazaar.dto.OrderDto;
+import tn.bazaar.service.CartService;
+import tn.bazaar.dto.AddProductInCartDto;
 
 @RestController
 @RequestMapping("/api/v1/user/cart")

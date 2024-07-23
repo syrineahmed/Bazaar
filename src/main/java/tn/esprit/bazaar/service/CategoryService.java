@@ -1,7 +1,7 @@
-package tn.esprit.bazaar.service;
+package tn.bazaar.service;
 
-import tn.esprit.bazaar.dto.CategoryDto;
-import tn.esprit.bazaar.entities.Category;
+import tn.bazaar.dto.CategoryDto;
+import tn.bazaar.entities.Category;
 
 import java.util.List;
 

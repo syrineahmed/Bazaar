@@ -1,12 +1,11 @@
-package tn.esprit.bazaar.entities;
+package tn.bazaar.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.security.core.parameters.P;
-import tn.esprit.bazaar.dto.ProductDto;
+import tn.bazaar.dto.ProductDto;
 
 @Entity
 @Data

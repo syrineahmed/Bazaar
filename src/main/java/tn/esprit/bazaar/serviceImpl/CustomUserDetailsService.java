@@ -1,13 +1,11 @@
-package tn.esprit.bazaar.serviceImpl;
+package tn.bazaar.serviceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import tn.esprit.bazaar.entities.User;
-import tn.esprit.bazaar.repository.UserRepository;
-import java.util.Collections;
+import tn.bazaar.repository.UserRepository;
 
 @Service
 @Primary

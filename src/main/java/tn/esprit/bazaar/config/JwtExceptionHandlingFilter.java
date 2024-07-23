@@ -1,4 +1,4 @@
-package tn.esprit.bazaar.config;
+package tn.bazaar.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

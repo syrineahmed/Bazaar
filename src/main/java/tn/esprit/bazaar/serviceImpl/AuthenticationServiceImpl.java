@@ -1,22 +1,21 @@
-package tn.esprit.bazaar.serviceImpl;
+package tn.bazaar.serviceImpl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import tn.esprit.bazaar.dto.JwtAuthenticationResponse;
-import tn.esprit.bazaar.dto.RefreshTokenRequest;
-import tn.esprit.bazaar.dto.SignUpRequest;
-import tn.esprit.bazaar.dto.SigninRequest;
-import tn.esprit.bazaar.entities.Order;
-import tn.esprit.bazaar.entities.OrderStatus;
-import tn.esprit.bazaar.entities.Role;
-import tn.esprit.bazaar.entities.User;
-import tn.esprit.bazaar.repository.OrderRepository;
-import tn.esprit.bazaar.repository.UserRepository;
-import tn.esprit.bazaar.service.AuthenticationService;
-import tn.esprit.bazaar.service.JWTService;
+import tn.bazaar.dto.JwtAuthenticationResponse;
+import tn.bazaar.dto.RefreshTokenRequest;
+import tn.bazaar.dto.SigninRequest;
+import tn.bazaar.entities.User;
+import tn.bazaar.service.AuthenticationService;
+import tn.bazaar.dto.SignUpRequest;
+import tn.bazaar.entities.Order;
+import tn.bazaar.entities.OrderStatus;
+import tn.bazaar.repository.OrderRepository;
+import tn.bazaar.repository.UserRepository;
+import tn.bazaar.service.JWTService;
 
 import java.util.Date;
 import java.util.HashMap;
