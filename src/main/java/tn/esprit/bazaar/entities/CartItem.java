@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import tn.esprit.bazaar.dto.CartItemDto;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -28,5 +31,17 @@ public class CartItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    public CartItemDto getCartDto(){
+        CartItemDto cartItemDto = new CartItemDto();
+        cartItemDto.setId(id);
+        cartItemDto.setPrice(price);
+        cartItemDto.setQuantity(quantity);
+        cartItemDto.setProductId(product.getId());
+        cartItemDto.setProductName(product.getName());
+        cartItemDto.setProductImage(product.getImage());
+        cartItemDto.setBuyerId(user.getId());
+        return cartItemDto;
+    }
 
 }

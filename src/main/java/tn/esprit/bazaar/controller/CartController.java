@@ -1,12 +1,11 @@
 package tn.esprit.bazaar.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tn.esprit.bazaar.dto.AddProductInCartDto;
+import tn.esprit.bazaar.dto.OrderDto;
 import tn.esprit.bazaar.service.CartService;
 
 @RestController
@@ -20,4 +19,18 @@ public class CartController {
     public ResponseEntity<?> addProductToCart(@RequestBody AddProductInCartDto addProductInCartDto) {
         return cartService.addProductToCart(addProductInCartDto);
     }
+
+    @GetMapping("/get/{userId}")
+    public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
+        OrderDto orderDto = cartService.getCartByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+    }
+
+    @GetMapping("/getmycart")
+    public ResponseEntity<?> getCartByCurrentUser() {
+        OrderDto orderDto = cartService.getCartByCurrentUser();
+        return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+    }
+
+
 }
