@@ -1,6 +1,6 @@
-package tn.bazaar.service;
+package tn.esprit.bazaar.service;
 
-import tn.bazaar.dto.ProductDto;
+import tn.esprit.bazaar.dto.ProductDto;
 
 import java.io.IOException;
 import java.util.List;

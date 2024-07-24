@@ -1,4 +1,4 @@
-package tn.bazaar.config;
+package tn.esprit.bazaar.config;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import tn.bazaar.service.JWTService;
+import tn.esprit.bazaar.service.JWTService;
 
 import java.io.IOException;
 

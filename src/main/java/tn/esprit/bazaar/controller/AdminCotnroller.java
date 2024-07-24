@@ -1,13 +1,14 @@
-package tn.bazaar.controller;
+package tn.esprit.bazaar.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.bazaar.dto.MessageResponse;
-import tn.bazaar.entities.User;
-import tn.bazaar.serviceImpl.UserServiceImpl;
-import tn.bazaar.entities.Role;
+import tn.esprit.bazaar.dto.MessageResponse;
+import tn.esprit.bazaar.entities.User;
+import tn.esprit.bazaar.serviceImpl.UserServiceImpl;
+import tn.esprit.bazaar.entities.Role;
+
 import java.util.List;
 
 @RestController

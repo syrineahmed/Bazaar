@@ -1,6 +1,6 @@
-package tn.bazaar.service;
+package tn.esprit.bazaar.service;
 
-import tn.bazaar.entities.Coupon;
+import tn.esprit.bazaar.entities.Coupon;
 
 import java.util.List;
 

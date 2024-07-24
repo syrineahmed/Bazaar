@@ -1,4 +1,4 @@
-package tn.bazaar.exceptions;
+package tn.esprit.bazaar.exceptions;
 
 public class ValidationException extends RuntimeException {
     public ValidationException(String message) {

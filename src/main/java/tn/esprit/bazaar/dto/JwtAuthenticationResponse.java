@@ -1,7 +1,7 @@
-package tn.bazaar.dto;
+package tn.esprit.bazaar.dto;
 
 import lombok.Data;
-import tn.bazaar.entities.User;
+import tn.esprit.bazaar.entities.User;
 
 @Data
 public class JwtAuthenticationResponse {

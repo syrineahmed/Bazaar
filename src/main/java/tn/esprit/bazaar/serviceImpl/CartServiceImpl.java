@@ -1,21 +1,21 @@
-package tn.bazaar.serviceImpl;
+package tn.esprit.bazaar.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import tn.bazaar.dto.CartItemDto;
-import tn.bazaar.dto.OrderDto;
-import tn.bazaar.entities.*;
-import tn.bazaar.repository.UserRepository;
-import tn.bazaar.service.CartService;
-import tn.bazaar.dto.AddProductInCartDto;
-import tn.bazaar.entities.*;
-import tn.bazaar.repository.CartItemRepository;
-import tn.bazaar.repository.OrderRepository;
-import tn.bazaar.repository.PorductRepository;
+import tn.esprit.bazaar.dto.CartItemDto;
+import tn.esprit.bazaar.dto.OrderDto;
+import tn.esprit.bazaar.entities.*;
+import tn.esprit.bazaar.exceptions.ValidationException;
+import tn.esprit.bazaar.repository.*;
+import tn.esprit.bazaar.service.CartService;
+import tn.esprit.bazaar.entities.*;
+import tn.esprit.bazaar.dto.AddProductInCartDto;
+import tn.esprit.bazaar.service.CouponService;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +36,13 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private UserServiceImpl userServiceImpl;
+
+    @Autowired
+    private CouponService couponService;
+    @Autowired
+    private CouponRepository couponRepository;
+
+    //everyyusercan add a product to cart
 
     @Override
     public ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto) {
@@ -100,6 +107,9 @@ public class CartServiceImpl implements CartService {
         orderDto.setOrderStatus(activeOrder.getOrderStatus());
         orderDto.setTotalAmount(activeOrder.getTotalAmount());
         orderDto.setCartItems(cartItemDtoList);
+        if (activeOrder.getCoupon() != null){     ///utilisation de coupon
+            orderDto.setCouponName(activeOrder.getCoupon().getName());
+        }
         return orderDto;
     }
 
@@ -123,6 +133,8 @@ public class CartServiceImpl implements CartService {
             orderDto.setOrderStatus(activeOrder.getOrderStatus());
             orderDto.setTotalAmount(activeOrder.getTotalAmount());
             orderDto.setCartItems(cartItemDtoList);
+
+
         } else {
 
             orderDto.setOrderStatus(OrderStatus.NONE);
@@ -131,5 +143,36 @@ public class CartServiceImpl implements CartService {
 
         return orderDto;
     }
+
+    //everu user can applyCoupon
+
+    public OrderDto applyCoupon(Long userId, String code) {
+        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
+        Coupon coupon = couponRepository.findByCode(code).orElseThrow(() -> new ValidationException("Coupon not found"));
+        if (couponIsExpired(coupon)) {
+
+            throw new ValidationException("Coupon is expired");
+        }
+        double discountAmount = ((coupon.getDiscount() / 100.0) * activeOrder.getTotalAmount());
+        double netAmount = activeOrder.getTotalAmount() - discountAmount;
+        activeOrder.setAmount((long)netAmount);
+        activeOrder.setDiscount((long)discountAmount);
+        activeOrder.setCoupon(coupon);
+        orderRepository.save(activeOrder);
+        return activeOrder.getOrderDto();
+
+    }
+
+    private boolean couponIsExpired(Coupon coupon) {
+        Date currentDate = new Date();
+        Date expirationDate = coupon.getExpirationDate();
+        return expirationDate != null && currentDate.after(expirationDate);
+    }
+
+
+    //the user can increase product quantity in cart
+   /* public OrderDto increaseProductQuantity(AddProductInCartDto addProductInCartDto) {
+       Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.PENDING);
+        }*/
 }
 

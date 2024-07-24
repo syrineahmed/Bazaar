@@ -1,4 +1,4 @@
-package tn.bazaar.entities;
+package tn.esprit.bazaar.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

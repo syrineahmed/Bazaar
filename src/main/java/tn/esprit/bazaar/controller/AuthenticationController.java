@@ -1,14 +1,14 @@
-package tn.bazaar.controller;
+package tn.esprit.bazaar.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.bazaar.dto.JwtAuthenticationResponse;
-import tn.bazaar.dto.RefreshTokenRequest;
-import tn.bazaar.dto.SignUpRequest;
-import tn.bazaar.dto.SigninRequest;
-import tn.bazaar.entities.User;
-import tn.bazaar.service.AuthenticationService;
+import tn.esprit.bazaar.dto.JwtAuthenticationResponse;
+import tn.esprit.bazaar.dto.RefreshTokenRequest;
+import tn.esprit.bazaar.dto.SignUpRequest;
+import tn.esprit.bazaar.dto.SigninRequest;
+import tn.esprit.bazaar.entities.User;
+import tn.esprit.bazaar.service.AuthenticationService;
 
 @RestController
 @RequestMapping("/api/v1/auth")

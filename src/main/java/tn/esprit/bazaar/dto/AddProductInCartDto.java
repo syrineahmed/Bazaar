@@ -1,4 +1,4 @@
-package tn.bazaar.dto;
+package tn.esprit.bazaar.dto;
 
 import lombok.Data;
 
@@ -6,4 +6,5 @@ import lombok.Data;
 public class AddProductInCartDto {
     private Long productId;
     private Long userId;
+
 }

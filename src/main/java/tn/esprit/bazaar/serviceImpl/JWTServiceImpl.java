@@ -1,4 +1,4 @@
-package tn.bazaar.serviceImpl;
+package tn.esprit.bazaar.serviceImpl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,7 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import tn.bazaar.service.JWTService;
+import tn.esprit.bazaar.service.JWTService;
 
 import java.security.Key;
 import java.util.Date;
@@ -19,7 +19,7 @@ public class JWTServiceImpl implements JWTService {
     public String generateToken(UserDetails userDetails){
         return Jwts.builder().setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date((System.currentTimeMillis())+1000*60*24))
+                .setExpiration(new Date((System.currentTimeMillis())+1000*60*24)) //24 min sinon 1h 1000*60*60
                 .signWith(getSiginKey(), SignatureAlgorithm.HS256)
                 .compact();
 

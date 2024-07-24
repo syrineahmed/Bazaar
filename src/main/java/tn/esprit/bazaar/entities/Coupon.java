@@ -1,4 +1,4 @@
-package tn.bazaar.entities;
+package tn.esprit.bazaar.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,6 +12,8 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String name;
 
     private String code;
 

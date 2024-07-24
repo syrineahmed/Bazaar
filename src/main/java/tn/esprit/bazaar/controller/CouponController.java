@@ -1,11 +1,11 @@
-package tn.bazaar.controller;
+package tn.esprit.bazaar.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.bazaar.entities.Coupon;
-import tn.bazaar.service.CouponService;
+import tn.esprit.bazaar.entities.Coupon;
+import tn.esprit.bazaar.service.CouponService;
 
 import java.util.List;
 

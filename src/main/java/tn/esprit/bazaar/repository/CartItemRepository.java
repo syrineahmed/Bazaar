@@ -1,8 +1,8 @@
-package tn.bazaar.repository;
+package tn.esprit.bazaar.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import tn.bazaar.entities.CartItem;
+import tn.esprit.bazaar.entities.CartItem;
 
 import java.util.Optional;
 

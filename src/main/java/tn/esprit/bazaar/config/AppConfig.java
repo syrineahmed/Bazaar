@@ -1,4 +1,4 @@
-package tn.bazaar.config;
+package tn.esprit.bazaar.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

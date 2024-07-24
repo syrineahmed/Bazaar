@@ -1,4 +1,4 @@
-package tn.bazaar.entities;
+package tn.esprit.bazaar.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

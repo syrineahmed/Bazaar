@@ -1,4 +1,4 @@
-package tn.bazaar.service;
+package tn.esprit.bazaar.service;
 
 public interface UserService {
      /*UserDetailsService userDetailsService() ;

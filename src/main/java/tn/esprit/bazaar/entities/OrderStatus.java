@@ -1,4 +1,4 @@
-package tn.bazaar.entities;
+package tn.esprit.bazaar.entities;
 
 public enum OrderStatus {
     PENDING,

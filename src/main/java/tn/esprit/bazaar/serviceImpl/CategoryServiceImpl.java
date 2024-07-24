@@ -1,14 +1,14 @@
-package tn.bazaar.serviceImpl;
+package tn.esprit.bazaar.serviceImpl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import tn.bazaar.dto.CategoryDto;
-import tn.bazaar.repository.PorductRepository;
-import tn.bazaar.entities.Category;
-import tn.bazaar.entities.Product;
-import tn.bazaar.repository.CategoryRepository;
-import tn.bazaar.service.CategoryService;
+import tn.esprit.bazaar.dto.CategoryDto;
+import tn.esprit.bazaar.repository.PorductRepository;
+import tn.esprit.bazaar.entities.Category;
+import tn.esprit.bazaar.entities.Product;
+import tn.esprit.bazaar.repository.CategoryRepository;
+import tn.esprit.bazaar.service.CategoryService;
 
 import java.util.List;
 

@@ -1,12 +1,12 @@
-package tn.bazaar.serviceImpl;
+package tn.esprit.bazaar.serviceImpl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import tn.bazaar.exceptions.ValidationException;
-import tn.bazaar.entities.Coupon;
-import tn.bazaar.repository.CouponRepository;
-import tn.bazaar.service.CouponService;
+import tn.esprit.bazaar.exceptions.ValidationException;
+import tn.esprit.bazaar.entities.Coupon;
+import tn.esprit.bazaar.repository.CouponRepository;
+import tn.esprit.bazaar.service.CouponService;
 
 import java.util.List;
 

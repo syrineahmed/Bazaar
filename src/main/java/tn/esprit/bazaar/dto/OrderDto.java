@@ -1,7 +1,7 @@
-package tn.bazaar.dto;
+package tn.esprit.bazaar.dto;
 
 import lombok.Data;
-import tn.bazaar.entities.OrderStatus;
+import tn.esprit.bazaar.entities.OrderStatus;
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +23,8 @@ public class OrderDto {
     private String userName;
 
     private List<CartItemDto> cartItems;
+
+    private String couponName;
 
 
 
