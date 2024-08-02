@@ -5,9 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.bazaar.dto.OrderDto;
+import tn.esprit.bazaar.dto.PlaceOrderDto;
 import tn.esprit.bazaar.exceptions.ValidationException;
 import tn.esprit.bazaar.service.CartService;
 import tn.esprit.bazaar.dto.AddProductInCartDto;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user/cart")
@@ -43,6 +46,30 @@ public class CartController {
         }
     }
 
+    @PostMapping("/addition")
+    public ResponseEntity<OrderDto> increaseProductQuantity(@RequestBody AddProductInCartDto addProductInCartDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.increaseProductQuantity(addProductInCartDto));
+    }
+    @PostMapping("/decrease")
+    public ResponseEntity<OrderDto> decreaseProductQuantity(@RequestBody AddProductInCartDto addProductInCartDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(cartService.decreaseProductQuantity(addProductInCartDto));
+    }
 
+
+    @PostMapping("/placeOrder")
+    public ResponseEntity<?> placeOrder(@RequestBody PlaceOrderDto placeOrderDto) {
+        try {
+            OrderDto orderDto = cartService.placeOrder(placeOrderDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(orderDto);
+        } catch (ValidationException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+
+    }
+
+    @GetMapping("/myPlacedOrders")
+    public ResponseEntity<List<OrderDto>> getMyPlacedOrders() {
+        return ResponseEntity.ok(cartService.getMyPlacedOrders());
+    }
 
 }
