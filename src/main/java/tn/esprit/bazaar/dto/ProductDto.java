@@ -10,10 +10,11 @@ public class ProductDto {
     private String description;
     private int quantity;
     private byte[] byteImg;
-    private Long categoryId;
+   private Long categoryId;
     private String categoryName;
     private MultipartFile img;
     private Long userId ;
+   // private Long quantity;
 }
 
 

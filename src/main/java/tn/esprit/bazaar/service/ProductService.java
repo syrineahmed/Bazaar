@@ -13,5 +13,7 @@ public interface ProductService {
 
         boolean deleteProduct(Long id);
     ProductDto updateProduct(Long productId, ProductDto productDto) throws IOException ;
+   ProductDto getProductById(Long productId) ;
+
 
     }

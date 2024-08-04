@@ -103,4 +103,12 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalStateException("Only the admin or the user who added the product can update it.");
         }
     }
+    public ProductDto getProductById(Long productId) {
+       Optional<Product> optionalProduct = porductRepository.findById(productId);
+         if (optionalProduct.isPresent()) {
+              return optionalProduct.get().getDto();
+         } else {
+             return null;
+         }
+         }
 }

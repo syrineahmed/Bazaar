@@ -88,4 +88,14 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error updating product: " + e.getMessage());
         }
     }
+
+    @GetMapping("/getbyid/{productId}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
+        ProductDto productDto = productService.getProductById(productId);
+        if (productDto != null) {
+            return ResponseEntity.ok(productDto);
+        } else {
+        return ResponseEntity.notFound().build();
+        }
+    }
 }
