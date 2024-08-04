@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.bazaar.dto.ProductDetailDto;
 import tn.esprit.bazaar.dto.ProductDto;
 import tn.esprit.bazaar.service.ProductService;
 
@@ -97,5 +98,15 @@ public class ProductController {
         } else {
         return ResponseEntity.notFound().build();
         }
+    }
+
+
+    @GetMapping("/getdetails/{productId}")
+    public ResponseEntity<ProductDetailDto> getProductDetailsById(@PathVariable Long productId) {
+        ProductDetailDto productDetailDto = productService.getProductDetails(productId);
+        if (productDetailDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(productDetailDto);
     }
 }

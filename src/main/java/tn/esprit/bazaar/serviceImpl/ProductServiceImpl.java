@@ -2,18 +2,19 @@ package tn.esprit.bazaar.serviceImpl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tn.esprit.bazaar.dto.ProductDetailDto;
 import tn.esprit.bazaar.dto.ProductDto;
-import tn.esprit.bazaar.entities.Role;
-import tn.esprit.bazaar.entities.User;
+import tn.esprit.bazaar.entities.*;
+import tn.esprit.bazaar.repository.FAQRepository;
 import tn.esprit.bazaar.repository.PorductRepository;
+import tn.esprit.bazaar.repository.ReviewRepository;
 import tn.esprit.bazaar.service.ProductService;
-import tn.esprit.bazaar.entities.Category;
-import tn.esprit.bazaar.entities.Product;
 import tn.esprit.bazaar.repository.CategoryRepository;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,10 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
 
     private final UserServiceImpl userService;
+
+    private final FAQRepository faqRepository;
+
+    private final ReviewRepository reviewRepository;
 
     //the current user can add a product
     public ProductDto addProduct(ProductDto productDto) throws IOException {
@@ -111,4 +116,21 @@ public class ProductServiceImpl implements ProductService {
              return null;
          }
          }
+
+         //all users can see the product details reviw and faq
+
+    public ProductDetailDto getProductDetails(Long productId) {
+        Optional<Product> optionalProduct = porductRepository.findById(productId);
+        if (optionalProduct.isPresent()) {
+            List<FAQ> faqList = faqRepository.findAllByProductId(productId);
+            List<Review> reviewList = reviewRepository.findAllByProductId(productId);
+            ProductDetailDto productDetailDto = new ProductDetailDto();
+            productDetailDto.setProductDto(optionalProduct.get().getDto());
+            productDetailDto.setFaqDtoList(faqList.stream().map(FAQ::getFAQDto).collect(Collectors.toList()));
+            productDetailDto.setReviewDtoList(reviewList.stream().map(Review::getDto).collect(Collectors.toList()));
+            return productDetailDto;
+
+        }
+        return null;
+    }
 }
