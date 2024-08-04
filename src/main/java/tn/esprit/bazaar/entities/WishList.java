@@ -1,11 +1,10 @@
-package tn.esprit.bazaar.dto;
+package tn.esprit.bazaar.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import tn.esprit.bazaar.entities.Product;
-import tn.esprit.bazaar.entities.User;
+import tn.esprit.bazaar.dto.WishListDto;
 
 @Data
 @Entity
@@ -24,5 +23,17 @@ public class WishList {
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+    public WishListDto getWishListDto(){
+        WishListDto wishListDto = new WishListDto();
+        wishListDto.setId(id);
+        wishListDto.setProductId(product.getId());
+        wishListDto.setProductName(product.getName());
+        wishListDto.setReturnedImg(product.getImage());
+        wishListDto.setProductDescription(product.getDescription());
+        wishListDto.setPrice(product.getPrice());
+        wishListDto.setUserId(user.getId());
+        return wishListDto;
+    }
 
 }

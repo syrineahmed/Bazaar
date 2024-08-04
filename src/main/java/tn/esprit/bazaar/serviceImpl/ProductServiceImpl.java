@@ -133,4 +133,11 @@ public class ProductServiceImpl implements ProductService {
         }
         return null;
     }
+
+    //the seller can see his posted products
+    public List<ProductDto> getProductsByCurrentUser() {
+        User currentUser = userService.getCurrentUser();
+        List<Product> products = porductRepository.findAllByUserId(currentUser.getId());
+        return products.stream().map(Product::getDto).collect(Collectors.toList());
+    }
 }

@@ -304,5 +304,15 @@ public class CartServiceImpl implements CartService {
                 .map(Order::getOrderDto)
                 .collect(Collectors.toList());
     }
+
+    //the usercan search for order by tanckingid
+
+    public OrderDto searchOrderByTrackingId(UUID trackingId){
+        Optional<Order> optionalOrder = orderRepository.findByTrackingId(trackingId);
+        if(optionalOrder.isPresent()){
+            return optionalOrder.get().getOrderDto();
+        }
+        return null;
+    }
 }
 

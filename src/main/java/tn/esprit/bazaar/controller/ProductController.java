@@ -42,6 +42,13 @@ public class ProductController {
         return ResponseEntity.ok(productDtos);
     }
 
+    @GetMapping("/myproducts")
+    public ResponseEntity<List<ProductDto>> getProductsByCurrentUser() {
+        List<ProductDto> products = productService.getProductsByCurrentUser();
+        return ResponseEntity.ok(products);
+    }
+
+
     @GetMapping("/searchbyname/{name}")
 
     public ResponseEntity<List<ProductDto>> getAllProductsByName(@PathVariable String name) {

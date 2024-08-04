@@ -11,6 +11,7 @@ import tn.esprit.bazaar.service.CartService;
 import tn.esprit.bazaar.dto.AddProductInCartDto;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/user/cart")
@@ -70,6 +71,28 @@ public class CartController {
     @GetMapping("/myPlacedOrders")
     public ResponseEntity<List<OrderDto>> getMyPlacedOrders() {
         return ResponseEntity.ok(cartService.getMyPlacedOrders());
+    }
+
+    @GetMapping("/searchOrder/{trackingId}")
+    public ResponseEntity<?> searchOrderByTrackingId(@PathVariable String trackingId) {
+        if (!isValidUUID(trackingId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid UUID format: " + trackingId);
+        }
+        UUID uuid = UUID.fromString(trackingId);
+        OrderDto orderDto = cartService.searchOrderByTrackingId(uuid);
+        if (orderDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found for tracking ID: " + trackingId);
+        }
+        return ResponseEntity.ok(orderDto);
+    }
+
+    private boolean isValidUUID(String uuid) {
+        try {
+            UUID.fromString(uuid);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
 }

@@ -6,6 +6,7 @@ import tn.esprit.bazaar.dto.AddProductInCartDto;
 import tn.esprit.bazaar.dto.PlaceOrderDto;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CartService {
      ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto ) ;
@@ -15,6 +16,7 @@ public interface CartService {
      OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto);
      OrderDto placeOrder(PlaceOrderDto placeOrderDto) ;
      List<OrderDto> getMyPlacedOrders() ;
+     OrderDto searchOrderByTrackingId(UUID trackingId);
 
 
 
@@ -23,4 +25,5 @@ public interface CartService {
 
 
 
-}
+
+     }
