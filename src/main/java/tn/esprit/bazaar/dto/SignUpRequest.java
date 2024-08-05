@@ -18,9 +18,11 @@ public class SignUpRequest {
     // private Image image;
     private Role role;
     private Gender gender;
-    private LocalDate dateOfBirth;
-    private Date createdDate;
-    private Date updatedDate;
+   // private LocalDate dateOfBirth;
+   private String dateOfBirth;
+
+    // private Date createdDate;
+  //  private Date updatedDate;
    // private boolean isActive;
 
 }

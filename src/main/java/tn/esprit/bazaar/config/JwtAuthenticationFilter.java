@@ -1,3 +1,4 @@
+// src/main/java/tn/esprit/bazaar/config/JwtAuthenticationFilter.java
 package tn.esprit.bazaar.config;
 
 import io.micrometer.common.util.StringUtils;
@@ -20,10 +21,8 @@ import tn.esprit.bazaar.service.JWTService;
 import java.io.IOException;
 
 @Component
-//@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
-    //private final UserServiceImpl userService;
     private final UserDetailsService userDetailsService;
 
     @Autowired
@@ -40,32 +39,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String userEmail;
         if (StringUtils.isEmpty(authHeader) || !org.apache.commons.lang3.StringUtils.startsWith(authHeader, "Bearer ")) {
             filterChain.doFilter(request, response);
-
             return;
-
         }
         jwt = authHeader.substring(7);
-        userEmail = jwtService.ExtractUserName(jwt);
+        userEmail = jwtService.extractUserName(jwt);
         if (StringUtils.isNotEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
-           // UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );
-
                 token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 securityContext.setAuthentication(token);
-                SecurityContextHolder.setContext((securityContext));
-
-
+                SecurityContextHolder.setContext(securityContext);
             }
-
         }
-        filterChain.doFilter(request,response);
-
+        filterChain.doFilter(request, response);
     }
 }

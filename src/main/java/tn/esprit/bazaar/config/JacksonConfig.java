@@ -1,17 +1,18 @@
-// src/main/java/tn/esprit/bazaar/config/AppConfig.java
+// src/main/java/tn/esprit/bazaar/config/JacksonConfig.java
 package tn.esprit.bazaar.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AppConfig {
+public class JacksonConfig {
 
     @Bean
-    public ObjectMapper objectMapper() {
+    public ObjectMapper customObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        // Additional configuration if needed
+        objectMapper.registerModule(new JavaTimeModule());
         return objectMapper;
     }
 }

@@ -1,6 +1,8 @@
 package tn.esprit.bazaar.serviceImpl;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +19,7 @@ import tn.esprit.bazaar.repository.OrderRepository;
 import tn.esprit.bazaar.repository.UserRepository;
 import tn.esprit.bazaar.service.JWTService;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -28,6 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
     private final OrderRepository orderRepository;   ///order
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
 
     public User signup(SignUpRequest signUpRequest) {
@@ -40,7 +44,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPictureUrl(signUpRequest.getPictureUrl());
         user.setRole((signUpRequest.getRole()));
         user.setGender((signUpRequest.getGender()));
-        user.setDateOfBirth(signUpRequest.getDateOfBirth());
+        //user.setDateOfBirth(signUpRequest.getDateOfBirth());
+        user.setDateOfBirth(signUpRequest.getDateOfBirth()); // Set dateOfBirth as String
         user.setCreatedDate(new Date());
         user.setUpdatedDate(new Date());
        // user.setActive(signUpRequest.isActive());
@@ -48,13 +53,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setEnabled(true);
         userRepository.save(user);
         ////when a user sign up he will have an order with status pending
-        Order order = new Order();
+       Order order = new Order();
         order.setAmount(0L);
         order.setTotalAmount(0L);
         order.setDiscount(0L);
         order.setUser(userRepository.save(user));
         order.setOrderStatus(OrderStatus.PENDING);
         orderRepository.save(order);
+        logger.info("User successfully signed up with email: {}", user.getEmail());
         return user;
 
 
@@ -98,7 +104,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return dto;
     }
     public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
-        String userEmail = jwtService.ExtractUserName(refreshTokenRequest.getToken());
+        String userEmail = jwtService.extractUserName(refreshTokenRequest.getToken());
         User user = userRepository.findByEmail(userEmail).orElseThrow();
         if (jwtService.isTokenValid(refreshTokenRequest.getToken(), user)) {
             var jwt = jwtService.generateToken(user);

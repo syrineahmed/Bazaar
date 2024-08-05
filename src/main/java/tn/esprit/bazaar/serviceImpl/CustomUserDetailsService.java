@@ -1,5 +1,8 @@
+// src/main/java/tn/esprit/bazaar/serviceImpl/CustomUserDetailsService.java
 package tn.esprit.bazaar.serviceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,6 +12,7 @@ import tn.esprit.bazaar.repository.UserRepository;
 
 @Service
 @Primary
+@Qualifier("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
@@ -20,6 +24,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException(("User not found")));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

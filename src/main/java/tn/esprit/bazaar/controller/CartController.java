@@ -1,6 +1,7 @@
 package tn.esprit.bazaar.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,8 +65,9 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.CREATED).body(orderDto);
         } catch (ValidationException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate entry error: " + ex.getMessage());
         }
-
     }
 
     @GetMapping("/myPlacedOrders")
