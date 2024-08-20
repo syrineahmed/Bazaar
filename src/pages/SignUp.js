@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Menu, Button, Typography, Card, Form, Input, Checkbox, Select } from "antd";
+import { Layout, Menu, Button, Typography, Card, Form, Input, Checkbox, Select, notification } from "antd";
 import logo1 from "../assets/images/logos-facebook.svg";
 import logo2 from "../assets/images/logo-apple.svg";
 import logo3 from "../assets/images/Google__G__Logo.svg.png";
@@ -12,7 +12,6 @@ const { Header, Footer, Content } = Layout;
 
 export default class SignUp extends Component {
 
-    const
     onFinish = async (values) => {
         try {
             // Adjust the request payload if necessary
@@ -28,6 +27,11 @@ export default class SignUp extends Component {
                 dateOfBirth: values.dateOfBirth
             });
             console.log('Success:', response.data);
+            notification.success({
+                message: 'Account Created',
+                description: 'Your account has been successfully created.',
+            });
+            this.props.history.push('/sign-in');
         } catch (error) {
             if (error.response) {
                 console.error('Response Error Data:', error.response.data);
@@ -37,7 +41,6 @@ export default class SignUp extends Component {
             }
         }
     };
-
 
     onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
