@@ -2320,7 +2320,7 @@ section.ant-layout.layout-content .ant-layout-content.content-ant {
   width: 100%;
 }
 .p-20 {
-  padding: "0px 20px 0px 0px";
+  padding: 0px 20px 0px 0px;
 }
 .layout-default .ant-layout-content.p-0 {
   padding: 0px;

@@ -503,7 +503,7 @@ function Home() {
                   <div className="h-full col-content p-20">
                     <div className="ant-muse">
                       <Text>Built by developers</Text>
-                      <Title level={5}>Muse Dashboard for Ant Design</Title>
+                      <Title level={5}>Bazaar Dashboard for Ant Design</Title>
                       <Paragraph className="lastweek mb-36">
                         From colors, cards, typography to complex elements, you
                         will find the full documentation.
