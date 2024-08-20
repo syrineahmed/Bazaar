@@ -7,5 +7,5 @@ import tn.esprit.bazaar.entities.User;
 public class JwtAuthenticationResponse {
     private String token;
     private String refreshToken;
-    User userDetails;
+    private User userDetails;
 }

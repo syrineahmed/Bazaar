@@ -69,28 +69,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     public JwtAuthenticationResponse signin(SigninRequest signinRequest) {
-
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getEmail(), signinRequest.getPassword()));
         var user = userRepository.findByEmail(signinRequest.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
         System.err.println(user.isEnabled());
         if (!user.isEnabled()) {
             throw new IllegalArgumentException("Please confirm your account to proceed.");
-
-
         } else {
             var jwt = jwtService.generateToken(user);
             var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
             JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
             jwtAuthenticationResponse.setToken(jwt);
             jwtAuthenticationResponse.setRefreshToken(refreshToken);
+            jwtAuthenticationResponse.setUserDetails(user); // Set user details
 
+            // Log user information
+            User userDto = convertToUserDto(user);
+            System.out.println("User Information: " + userDto);
 
             return jwtAuthenticationResponse;
-
         }
-
-
     }
     private User convertToUserDto(User user) {
         User dto = new User();
