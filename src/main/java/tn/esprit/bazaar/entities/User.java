@@ -53,7 +53,7 @@ public class User implements UserDetails {
     private Gender gender;
    // @Column(name = "phone_number")
    @NotBlank
-    private String phoneNumber;
+        private String phoneNumber;
     private String pictureUrl;
     private Date createdDate;
     private Date updatedDate;

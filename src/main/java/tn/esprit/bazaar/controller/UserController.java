@@ -10,6 +10,7 @@ import tn.esprit.bazaar.serviceImpl.UserServiceImpl;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3002")
 public class UserController {
     private final UserServiceImpl userService;
 //testing
