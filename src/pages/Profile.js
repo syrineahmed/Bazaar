@@ -12,6 +12,9 @@ import {
   Radio,
   Switch,
   Upload,
+  Modal,
+  Form,
+  Input,
 } from "antd";
 import {
   FacebookOutlined,
@@ -34,6 +37,7 @@ function Profile() {
   const [userData, setUserData] = useState(null);
   const [imageURL, setImageURL] = useState(false);
   const [, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -44,6 +48,8 @@ function Profile() {
             {
               headers: {
                 Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+
               },
             }
         );
@@ -87,6 +93,50 @@ function Profile() {
       });
     }
   };
+
+  const handlePencilClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleFormSubmit = async (values) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.put(
+          "http://localhost:8080/api/v1/user/updateprofile",
+          {
+            id: userData?.id, // Ensure to include the ID if required
+            ...values // Include all form values
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+      );
+      if (response.status === 200) {
+        message.success("User updated successfully");
+        setIsModalVisible(false); // Close the modal
+      } else {
+        message.error("Failed to update user");
+      }
+    } catch (error) {
+      console.error("Failed to update user profile:", error);
+      console.error("Error response:", error.response);
+      if (error.response && error.response.data) {
+        message.error(`Failed to update user profile: ${error.response.data}`);
+      } else {
+        message.error("Failed to update user profile. Please try again.");
+      }
+    }
+  };
+
+
+
 
 
   const pencil = (
@@ -259,7 +309,7 @@ function Profile() {
                 bordered={false}
                 title={<h6 className="font-semibold m-0">Profile Information</h6>}
                 className="header-solid h-full card-profile-information"
-                extra={<Button type="link">{pencil}</Button>}
+                extra={<Button type="link" onClick={handlePencilClick}>{pencil}</Button>}
                 bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
             >
               <Descriptions title="User Info">
@@ -277,9 +327,7 @@ function Profile() {
                 </Descriptions.Item>
               </Descriptions>
               <hr className="my-25" />
-              <h6 className="font-semibold text-muted text-sm">
-                Social Media
-              </h6>
+              <h6 className="font-semibold text-muted text-sm">Social Media</h6>
               <div className="social">
                 <Button
                     type="link"
@@ -369,6 +417,54 @@ function Profile() {
             </Card>
           </Col>
         </Row>
+
+        <Modal
+            title="Update Profile"
+            visible={isModalVisible}
+            onCancel={handleCancel}
+            footer={null}
+        >
+          <Form
+              layout="vertical"
+              initialValues={userData}
+              onFinish={handleFormSubmit}
+          >
+
+          <Form.Item
+                name="firstName"
+                label="First Name"
+                rules={[{ required: true, message: "Please input your first name!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+                name="lastName"
+                label="Last Name"
+                rules={[{ required: true, message: "Please input your last name!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+                name="email"
+                label="Email"
+                rules={[{ required: true, message: "Please input your email!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+                name="phoneNumber"
+                label="Phone Number"
+                rules={[{ required: true, message: "Please input your phone number!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Update
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </>
   );
 }
