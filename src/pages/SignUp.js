@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Menu, Button, Typography, Card, Form, Input, Checkbox, Select, notification } from "antd";
+import { Layout, Menu, Button, Typography, Card, Form, Input, Checkbox, Select, notification, DatePicker } from "antd";
 import logo1 from "../assets/images/logos-facebook.svg";
 import logo2 from "../assets/images/logo-apple.svg";
 import logo3 from "../assets/images/Google__G__Logo.svg.png";
@@ -24,7 +24,7 @@ export default class SignUp extends Component {
                 pictureUrl: values.pictureUrl,
                 role: values.role,
                 gender: values.gender,
-                dateOfBirth: values.dateOfBirth
+                dateOfBirth: values.dateOfBirth // Ensure dateOfBirth is handled as a string
             });
             console.log('Success:', response.data);
             notification.success({
@@ -181,10 +181,12 @@ export default class SignUp extends Component {
 
                                 <Form.Item
                                     name="dateOfBirth"
+                                    label="Date of Birth"
                                     rules={[{ required: true, message: "Please input your date of birth!" }]}
                                 >
-                                    <Input placeholder="Date of Birth" />
+                                    <DatePicker format="YYYY-MM-DD" />
                                 </Form.Item>
+
                                 <Form.Item name="remember" valuePropName="checked">
                                     <Checkbox>
                                         I agree to the{" "}

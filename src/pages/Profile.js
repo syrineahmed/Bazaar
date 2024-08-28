@@ -15,6 +15,7 @@ import {
   Modal,
   Form,
   Input,
+  DatePicker,
 } from "antd";
 import {
   FacebookOutlined,
@@ -32,6 +33,7 @@ import convesionImg5 from "../assets/images/face-2.jpg";
 import project1 from "../assets/images/home-decor-1.jpeg";
 import project2 from "../assets/images/home-decor-2.jpeg";
 import project3 from "../assets/images/home-decor-3.jpeg";
+import moment from "moment";
 
 function Profile() {
   const [userData, setUserData] = useState(null);
@@ -49,7 +51,6 @@ function Profile() {
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
-
               },
             }
         );
@@ -109,7 +110,8 @@ function Profile() {
           "http://localhost:8080/api/v1/user/updateprofile",
           {
             id: userData?.id, // Ensure to include the ID if required
-            ...values // Include all form values
+            ...values, // Include all form values
+            dateOfBirth: values.dateOfBirth.format("YYYY-MM-DD"), // Format dateOfBirth as string
           },
           {
             headers: {
@@ -134,10 +136,6 @@ function Profile() {
       }
     }
   };
-
-
-
-
 
   const pencil = (
       <svg
@@ -309,7 +307,11 @@ function Profile() {
                 bordered={false}
                 title={<h6 className="font-semibold m-0">Profile Information</h6>}
                 className="header-solid h-full card-profile-information"
-                extra={<Button type="link" onClick={handlePencilClick}>{pencil}</Button>}
+                extra={
+                  <Button type="link" onClick={handlePencilClick}>
+                    {pencil}
+                  </Button>
+                }
                 bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
             >
               <Descriptions title="User Info">
@@ -426,11 +428,13 @@ function Profile() {
         >
           <Form
               layout="vertical"
-              initialValues={userData}
+              initialValues={{
+                ...userData,
+                dateOfBirth: userData ? moment(userData.dateOfBirth) : null,
+              }}
               onFinish={handleFormSubmit}
           >
-
-          <Form.Item
+            <Form.Item
                 name="firstName"
                 label="First Name"
                 rules={[{ required: true, message: "Please input your first name!" }]}
@@ -455,6 +459,20 @@ function Profile() {
                 name="phoneNumber"
                 label="Phone Number"
                 rules={[{ required: true, message: "Please input your phone number!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+                name="dateOfBirth"
+                label="Date of Birth"
+                rules={[{ required: true, message: "Please input your date of birth!" }]}
+            >
+              <DatePicker format="YYYY-MM-DD" />
+            </Form.Item>
+            <Form.Item
+                name="pictureUrl"
+                label="Picture URL"
+                rules={[{ required: true, message: "Please input your picture URL!" }]}
             >
               <Input />
             </Form.Item>
