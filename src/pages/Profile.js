@@ -52,9 +52,16 @@ function Profile() {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
               },
+              responseType: 'json', // Fetch as JSON
             }
         );
-        setUserData(response.data);
+
+        const { image, ...userData } = response.data;
+
+        // Convert BLOB image to Base64
+        const base64Image = `data:image/jpeg;base64,${image}`;
+
+        setUserData({ ...userData, pictureUrl: base64Image });
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
         message.error("Failed to fetch user profile. Please try again.");
@@ -105,30 +112,67 @@ function Profile() {
 
   const handleFormSubmit = async (values) => {
     try {
+      const formData = new FormData();
+      formData.append("user", JSON.stringify({
+        id: userData?.id,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        dateOfBirth: values.dateOfBirth.format("YYYY-MM-DD"),
+      }));
+
+      if (values.img && values.img[0].originFileObj) {
+        formData.append("img", values.img[0].originFileObj);
+      }
+
       const token = localStorage.getItem("jwtToken");
       const response = await axios.put(
           "http://localhost:8080/api/v1/user/updateprofile",
-          {
-            id: userData?.id, // Ensure to include the ID if required
-            ...values, // Include all form values
-            dateOfBirth: values.dateOfBirth.format("YYYY-MM-DD"), // Format dateOfBirth as string
-          },
+          formData,
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
+              "Content-Type": "multipart/form-data",
             },
           }
       );
+
       if (response.status === 200) {
         message.success("User updated successfully");
-        setIsModalVisible(false); // Close the modal
+
+        // Update the imageURL state if a new image was uploaded
+        if (values.img && values.img[0].originFileObj) {
+          getBase64(values.img[0].originFileObj, (imageUrl) => {
+            setImageURL(imageUrl);
+            setUserData({
+              ...userData,
+              firstName: values.firstName,
+              lastName: values.lastName,
+              email: values.email,
+              phoneNumber: values.phoneNumber,
+              dateOfBirth: values.dateOfBirth.format("YYYY-MM-DD"),
+              pictureUrl: imageUrl,
+            });
+          });
+        } else {
+          setUserData({
+            ...userData,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            phoneNumber: values.phoneNumber,
+            dateOfBirth: values.dateOfBirth.format("YYYY-MM-DD"),
+            pictureUrl: userData.pictureUrl,
+          });
+        }
+
+        setIsModalVisible(false);
       } else {
         message.error("Failed to update user");
       }
     } catch (error) {
       console.error("Failed to update user profile:", error);
-      console.error("Error response:", error.response);
       if (error.response && error.response.data) {
         message.error(`Failed to update user profile: ${error.response.data}`);
       } else {
@@ -266,9 +310,7 @@ function Profile() {
               <Row justify="space-between" align="middle" gutter={[24, 0]}>
                 <Col span={24} md={12} className="col-info">
                   <Avatar.Group>
-                    <Avatar size={74} shape="square" src={profilavatar} />
-
-                    <div className="avatar-info">
+                    <Avatar size={74} shape="square" src={userData?.pictureUrl || profilavatar} />                    <div className="avatar-info">
                       <h4 className="font-semibold m-0">
                         {userData?.firstName} {userData?.lastName}
                       </h4>
@@ -295,11 +337,11 @@ function Profile() {
                     <Radio.Button value="c">PROJECTS</Radio.Button>
                     <Radio.Button value="d">CHANGE PASSWORD</Radio.Button>
                   </Radio.Group>
-
                 </Col>
               </Row>
             }
         />
+
 
 
         <Row gutter={[24, 0]}>
@@ -357,7 +399,7 @@ function Profile() {
                 }
                 bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
             >
-              <Descriptions title="User Info">
+              <Descriptions title="">
                 <Descriptions.Item label="Full Name" span={3}>
                   {userData?.firstName} {userData?.lastName}
                 </Descriptions.Item>
@@ -534,19 +576,31 @@ function Profile() {
             >
               <DatePicker format="YYYY-MM-DD" />
             </Form.Item>
+
+            {/* Upload Picture */}
             <Form.Item
-                name="pictureUrl"
-                label="Picture URL"
-                rules={[{ required: true, message: "Please input your picture URL!" }]}
+                name="img"
+                label="Profile Picture"
+                valuePropName="fileList"
+                getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
             >
-              <Input />
+              <Upload
+                  name="img"
+                  listType="picture"
+                  beforeUpload={beforeUpload}
+                  onChange={handleChange}
+              >
+                <Button icon={<VerticalAlignTopOutlined />}>Upload</Button>
+              </Upload>
             </Form.Item>
+
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Update
               </Button>
             </Form.Item>
           </Form>
+
         </Modal>
       </>
 

@@ -1,31 +1,47 @@
 import React, { Component } from "react";
-import { Layout, Menu, Button, Typography, Card, Form, Input, Checkbox, Select, notification, DatePicker } from "antd";
+import { Layout, Menu, Button, Typography, Card, Form, Input, Checkbox, Select, notification, DatePicker, Upload } from "antd";
 import logo1 from "../assets/images/logos-facebook.svg";
 import logo2 from "../assets/images/logo-apple.svg";
 import logo3 from "../assets/images/Google__G__Logo.svg.png";
 import { Link } from "react-router-dom";
 import { DribbbleOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined } from "@ant-design/icons";
 import authService from '../services/authService'; // Adjust the import path accordingly
+import { UploadOutlined } from "@ant-design/icons";
+import { RcFile } from "antd/es/upload";
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
 
 export default class SignUp extends Component {
+    state = {
+        file: null,
+    };
+
+    handleChange = (info) => {
+        if (info.file.status === 'done') {
+            this.setState({ file: info.file.originFileObj });
+        }
+    };
 
     onFinish = async (values) => {
         try {
-            // Adjust the request payload if necessary
-            const response = await authService.signup({
+            const formData = new FormData();
+            formData.append('signUpRequest', JSON.stringify({
                 firstName: values.firstName,
                 lastName: values.lastName,
                 email: values.email,
                 password: values.password,
                 phoneNumber: values.phoneNumber,
-                pictureUrl: values.pictureUrl,
+              //  pictureUrl: values.pictureUrl,
                 role: values.role,
                 gender: values.gender,
-                dateOfBirth: values.dateOfBirth // Ensure dateOfBirth is handled as a string
-            });
+                dateOfBirth: values.dateOfBirth.format("YYYY-MM-DD") // Format date correctly
+            }));
+            if (this.state.file) {
+                formData.append('img', this.state.file);
+            }
+
+            const response = await authService.signup(formData);
             console.log('Success:', response.data);
             notification.success({
                 message: 'Account Created',
@@ -88,7 +104,7 @@ export default class SignUp extends Component {
                             <div className="content">
                                 <Title>Sign Up</Title>
                                 <p className="text-lg">
-                                    Use these awesome forms to login or create new account in your project for free.
+                                    Use these awesome forms to login or create a new account in your project for free.
                                 </p>
                             </div>
                         </div>
@@ -150,12 +166,12 @@ export default class SignUp extends Component {
                                 >
                                     <Input placeholder="Phone Number" />
                                 </Form.Item>
-                                <Form.Item
+                                {/*<Form.Item
                                     name="pictureUrl"
                                     rules={[{ required: true, message: "Please input your picture URL!" }]}
                                 >
                                     <Input placeholder="Picture URL" />
-                                </Form.Item>
+                                </Form.Item>*/}
                                 <Form.Item
                                     name="role"
                                     rules={[{ required: true, message: "Please select your role!" }]}
@@ -185,6 +201,23 @@ export default class SignUp extends Component {
                                     rules={[{ required: true, message: "Please input your date of birth!" }]}
                                 >
                                     <DatePicker format="YYYY-MM-DD" />
+                                </Form.Item>
+
+                                <Form.Item
+                                    name="profileImage"
+                                    label="Profile Image"
+                                >
+                                    <Upload
+                                        customRequest={({ file, onSuccess }) => {
+                                            setTimeout(() => {
+                                                onSuccess(null, file);
+                                            }, 0);
+                                        }}
+                                        showUploadList={false}
+                                        onChange={this.handleChange}
+                                    >
+                                        <Button icon={<UploadOutlined />}>Upload Image</Button>
+                                    </Upload>
                                 </Form.Item>
 
                                 <Form.Item name="remember" valuePropName="checked">
