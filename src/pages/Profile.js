@@ -216,6 +216,42 @@ function Profile() {
     },
   ];
 
+  const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
+
+  const handlePasswordClick = () => {
+    setIsPasswordModalVisible(true);
+  };
+
+  const handlePasswordCancel = () => {
+    setIsPasswordModalVisible(false);
+  };
+  const handlePasswordChange = async (values) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.put(
+          `http://localhost:8080/api/v1/user/changepassword/${userData.id}/${values.password}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+      );
+
+      if (response.status === 200) {
+        message.success("Password changed successfully");
+        setIsPasswordModalVisible(false);
+      } else {
+        message.error("Failed to change password");
+      }
+    } catch (error) {
+      console.error("Failed to change password:", error);
+      message.error("Failed to change password. Please try again.");
+    }
+  };
+
+
   return (
       <>
         <div
@@ -249,15 +285,22 @@ function Profile() {
                       justifyContent: "flex-end",
                     }}
                 >
-                  <Radio.Group defaultValue="a">
+                  <Radio.Group defaultValue="a" onChange={(e) => {
+                    if (e.target.value === "d") {
+                      handlePasswordClick();
+                    }
+                  }}>
                     <Radio.Button value="a">OVERVIEW</Radio.Button>
                     <Radio.Button value="b">TEAMS</Radio.Button>
                     <Radio.Button value="c">PROJECTS</Radio.Button>
+                    <Radio.Button value="d">CHANGE PASSWORD</Radio.Button>
                   </Radio.Group>
+
                 </Col>
               </Row>
             }
-        ></Card>
+        />
+
 
         <Row gutter={[24, 0]}>
           <Col span={24} md={8} className="mb-24 ">
@@ -419,6 +462,28 @@ function Profile() {
             </Card>
           </Col>
         </Row>
+        <Modal
+            title="Change Password"
+            visible={isPasswordModalVisible}
+            onCancel={handlePasswordCancel}
+            footer={null}
+        >
+          <Form onFinish={handlePasswordChange}>
+            <Form.Item
+                name="password"
+                label="New Password"
+                rules={[{ required: true, message: "Please input your new password!" }]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Change Password
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+
 
         <Modal
             title="Update Profile"
@@ -484,6 +549,7 @@ function Profile() {
           </Form>
         </Modal>
       </>
+
   );
 }
 
