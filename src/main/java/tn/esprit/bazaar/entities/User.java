@@ -55,6 +55,9 @@ public class User implements UserDetails {
    @NotBlank
         private String phoneNumber;
     private String pictureUrl;
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] image;
     private Date createdDate;
     private Date updatedDate;
 

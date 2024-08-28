@@ -19,6 +19,7 @@ import tn.esprit.bazaar.repository.OrderRepository;
 import tn.esprit.bazaar.repository.UserRepository;
 import tn.esprit.bazaar.service.JWTService;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,14 +35,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
 
-    public User signup(SignUpRequest signUpRequest) {
+    public User signup(SignUpRequest signUpRequest) throws IOException {
 
         User user = new User();
         user.setEmail(signUpRequest.getEmail());
         user.setFirstName(signUpRequest.getFirstName());
         user.setLastName(signUpRequest.getLastName());
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
-        user.setPictureUrl(signUpRequest.getPictureUrl());
+       // user.setPictureUrl(signUpRequest.getPictureUrl());
+        user.setImage(signUpRequest.getByteImg());
         user.setRole((signUpRequest.getRole()));
         user.setGender((signUpRequest.getGender()));
         //user.setDateOfBirth(signUpRequest.getDateOfBirth());

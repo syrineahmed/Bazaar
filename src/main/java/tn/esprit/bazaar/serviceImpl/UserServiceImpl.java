@@ -110,11 +110,14 @@ public class UserServiceImpl implements UserDetailsService {
                 existingUser.setEmail(user.getEmail());
                 existingUser.setDateOfBirth(user.getDateOfBirth());
                 existingUser.setPhoneNumber(user.getPhoneNumber());
-                existingUser.setPictureUrl(user.getPictureUrl());
-
+                //existingUser.setPictureUrl(user.getPictureUrl());
+                if (user.getImage() != null) {
+                    existingUser.setImage(user.getImage());
+                }
                 return userRepository.save(existingUser);
             }
         }
+
         return null;
     }
 
