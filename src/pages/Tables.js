@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Card, Radio, Table, Upload, message, Button, Avatar, Typography, Progress } from "antd";
+import { Row, Col, Card, Radio, Table, Upload, message, Button, Avatar, Typography, Progress, Modal, Select, Input } from "antd";
 import { ToTopOutlined } from "@ant-design/icons";
 import ava1 from "../assets/images/logo-shopify.svg";
 import ava2 from "../assets/images/logo-atlassian.svg";
@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const { Title } = Typography;
+const { Option } = Select;
+const { Search } = Input;
 
 const formProps = {
   name: "file",
@@ -92,18 +94,26 @@ const projectData = [
 
 const Tables = () => {
   const [users, setUsers] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [newRole, setNewRole] = useState("");
 
   useEffect(() => {
-    // Fetch users data
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = (searchTerm = "") => {
     axios
-        .get("http://localhost:8080/api/v1/admin/all") // Replace with your backend URL
+        .get(`http://localhost:8080/api/v1/admin/users/search`, {
+          params: { searchTerm }
+        })
         .then((response) => {
           setUsers(response.data);
         })
         .catch((error) => {
           console.error("Error fetching users:", error);
         });
-  }, []);
+  };
 
   const handleDelete = (id) => {
     axios
@@ -113,10 +123,40 @@ const Tables = () => {
           setUsers(users.filter((user) => user.id !== id));
         })
         .catch((error) => {
-          // Log or display detailed error message
           console.error("Error deleting user:", error.response ? error.response.data : error.message);
           message.error("Error deleting user: " + (error.response ? error.response.data.message : error.message));
         });
+  };
+
+  const handleUpdateRole = (email) => {
+    setSelectedUser(email);
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    axios
+        .put(`http://localhost:8080/api/v1/admin/users/${selectedUser}/role`, null, {
+          params: { newRole }
+        })
+        .then(() => {
+          message.success("User role updated successfully");
+          setUsers(users.map(user => user.email === selectedUser ? { ...user, role: newRole } : user));
+          setIsModalVisible(false);
+          setNewRole("");
+        })
+        .catch((error) => {
+          console.error("Error updating user role:", error);
+          message.error("Error updating user role: " + (error.response ? error.response.data.message : error.message));
+        });
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setNewRole("");
+  };
+
+  const handleSearchChange = (e) => {
+    fetchUsers(e.target.value);
   };
 
   const userColumns = [
@@ -138,6 +178,11 @@ const Tables = () => {
       key: "email",
     },
     {
+      title: "ROLE",
+      dataIndex: "role",
+      key: "role",
+    },
+    {
       title: "PHONE NUMBER",
       dataIndex: "phoneNumber",
       key: "phoneNumber",
@@ -151,9 +196,14 @@ const Tables = () => {
       title: "ACTION",
       key: "action",
       render: (_, record) => (
-          <Button type="primary" danger onClick={() => handleDelete(record.id)}>
-            Delete
-          </Button>
+          <>
+            <Button type="primary" danger onClick={() => handleDelete(record.id)}>
+              Delete
+            </Button>
+            <Button type="default" onClick={() => handleUpdateRole(record.email)}>
+              Update Role
+            </Button>
+          </>
       ),
     },
   ];
@@ -163,6 +213,7 @@ const Tables = () => {
     id: user.id,
     image: user.image,
     email: user.email,
+    role: user.role,
     phoneNumber: user.phoneNumber,
     dateOfBirth: new Date(user.dateOfBirth).toLocaleDateString(), // Convert to readable date format
   }));
@@ -176,6 +227,15 @@ const Tables = () => {
                   bordered={false}
                   className="criclebox tablespace mb-24"
                   title="Users Table"
+                  extra={
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                      <Search
+                          placeholder="Search users"
+                          onChange={handleSearchChange}
+                          style={{ width: 200 }}
+                      />
+                    </div>
+                  }
               >
                 <div className="table-responsive">
                   <Table
@@ -227,6 +287,14 @@ const Tables = () => {
             </Col>
           </Row>
         </div>
+        <Modal title="Update User Role" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <Select placeholder="Select new role" value={newRole} onChange={(value) => setNewRole(value)} style={{ width: '100%' }}>
+            <Option value="ADMIN">ADMIN</Option>
+            <Option value="USER">USER</Option>
+            <Option value="COMPANY">COMPANY</Option>
+            <Option value="EMPLOYEE">EMPLOYEE</Option>
+          </Select>
+        </Modal>
       </>
   );
 };
