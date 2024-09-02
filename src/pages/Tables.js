@@ -198,10 +198,10 @@ const Tables = () => {
       render: (_, record) => (
           <>
             <Button type="primary" danger onClick={() => handleDelete(record.id)}>
-              Delete
+              🗑️
             </Button>
             <Button type="default" onClick={() => handleUpdateRole(record.email)}>
-              Update Role
+              ✏️
             </Button>
           </>
       ),
@@ -228,13 +228,11 @@ const Tables = () => {
                   className="criclebox tablespace mb-24"
                   title="Users Table"
                   extra={
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                      <Search
-                          placeholder="Search users"
-                          onChange={handleSearchChange}
-                          style={{ width: 200 }}
-                      />
-                    </div>
+                    <Search
+                        placeholder="Search users"
+                        onChange={handleSearchChange}
+                        style={{ width: 200, margin: '0 auto', display: 'block' }}
+                    />
                   }
               >
                 <div className="table-responsive">
