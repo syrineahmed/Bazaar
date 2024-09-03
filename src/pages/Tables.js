@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Card, Radio, Table, Upload, message, Button, Avatar, Typography, Progress, Modal, Select, Input } from "antd";
+import { Row, Col, Card, Radio, Table, Upload, message, Button, Avatar, Typography, Progress, Modal, Select, Input, Form } from "antd";
 import { ToTopOutlined } from "@ant-design/icons";
 import ava1 from "../assets/images/logo-shopify.svg";
 import ava2 from "../assets/images/logo-atlassian.svg";
@@ -94,12 +94,18 @@ const projectData = [
 
 const Tables = () => {
   const [users, setUsers] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [newRole, setNewRole] = useState("");
+  const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false);
+  const [newCategory, setNewCategory] = useState({ name: "", description: "" });
+  const [isUpdateCategoryModalVisible, setIsUpdateCategoryModalVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     fetchUsers();
+    fetchCategories();
   }, []);
 
   const fetchUsers = (searchTerm = "") => {
@@ -112,6 +118,17 @@ const Tables = () => {
         })
         .catch((error) => {
           console.error("Error fetching users:", error);
+        });
+  };
+
+  const fetchCategories = () => {
+    axios
+        .get(`http://localhost:8080/api/v1/admin/category/all`)
+        .then((response) => {
+          setCategories(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching categories:", error);
         });
   };
 
@@ -128,9 +145,27 @@ const Tables = () => {
         });
   };
 
+  const handleDeleteCategory = (id) => {
+    axios
+        .delete(`http://localhost:8080/api/v1/admin/category/delete/${id}`)
+        .then(() => {
+          message.success("Category deleted successfully");
+          setCategories(categories.filter((category) => category.id !== id));
+        })
+        .catch((error) => {
+          console.error("Error deleting category:", error.response ? error.response.data : error.message);
+          message.error("Error deleting category: " + (error.response ? error.response.data.message : error.message));
+        });
+  };
+
   const handleUpdateRole = (email) => {
     setSelectedUser(email);
     setIsModalVisible(true);
+  };
+
+  const handleUpdateCategory = (category) => {
+    setSelectedCategory(category);
+    setIsUpdateCategoryModalVisible(true);
   };
 
   const handleOk = () => {
@@ -150,13 +185,60 @@ const Tables = () => {
         });
   };
 
+  const handleUpdateCategoryOk = () => {
+    // Creating the payload explicitly
+    const payload = {
+      id: selectedCategory.id,
+      name: selectedCategory.name,
+      description: selectedCategory.description
+    };
+
+    axios
+        .put(`http://localhost:8080/api/v1/admin/category/update/${selectedCategory.id}`, payload, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(() => {
+          message.success("Category updated successfully");
+          setCategories(categories.map(category => category.id === selectedCategory.id ? selectedCategory : category));
+          setIsUpdateCategoryModalVisible(false);
+          setSelectedCategory(null);
+        })
+        .catch((error) => {
+          console.error("Error updating category:", error);
+          message.error("Error updating category: " + (error.response ? error.response.data.message : error.message));
+        });
+  };
+
+
   const handleCancel = () => {
     setIsModalVisible(false);
     setNewRole("");
   };
 
+  const handleUpdateCategoryCancel = () => {
+    setIsUpdateCategoryModalVisible(false);
+    setSelectedCategory(null);
+  };
+
   const handleSearchChange = (e) => {
     fetchUsers(e.target.value);
+  };
+
+  const handleCategoryCreate = () => {
+    axios
+        .post(`http://localhost:8080/api/v1/admin/category/create`, newCategory)
+        .then((response) => {
+          message.success("Category created successfully");
+          setCategories([...categories, response.data]);
+          setIsCategoryModalVisible(false);
+          setNewCategory({ name: "", description: "" });
+        })
+        .catch((error) => {
+          console.error("Error creating category:", error);
+          message.error("Error creating category: " + (error.response ? error.response.data.message : error.message));
+        });
   };
 
   const userColumns = [
@@ -208,6 +290,33 @@ const Tables = () => {
     },
   ];
 
+  const categoryColumns = [
+    {
+      title: "NAME",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "DESCRIPTION",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "ACTION",
+      key: "action",
+      render: (_, record) => (
+          <>
+            <Button type="primary" danger onClick={() => handleDeleteCategory(record.id)}>
+              🗑️
+            </Button>
+            <Button type="default" onClick={() => handleUpdateCategory(record)}>
+              ✏️
+            </Button>
+          </>
+      ),
+    },
+  ];
+
   const userData = users.map((user, index) => ({
     key: index,
     id: user.id,
@@ -216,6 +325,13 @@ const Tables = () => {
     role: user.role,
     phoneNumber: user.phoneNumber,
     dateOfBirth: new Date(user.dateOfBirth).toLocaleDateString(), // Convert to readable date format
+  }));
+
+  const categoryData = categories.map((category, index) => ({
+    key: index,
+    id: category.id,
+    name: category.name,
+    description: category.description,
   }));
 
   return (
@@ -239,6 +355,29 @@ const Tables = () => {
                   <Table
                       columns={userColumns}
                       dataSource={userData}
+                      pagination={false}
+                      className="ant-border-space"
+                  />
+                </div>
+              </Card>
+            </Col>
+
+            {/* Categories Table */}
+            <Col xs="24" xl={24}>
+              <Card
+                  bordered={false}
+                  className="criclebox tablespace mb-24"
+                  title="Categories Table"
+                  extra={
+                    <Button type="primary" onClick={() => setIsCategoryModalVisible(true)}>
+                      Add Category
+                    </Button>
+                  }
+              >
+                <div className="table-responsive">
+                  <Table
+                      columns={categoryColumns}
+                      dataSource={categoryData}
                       pagination={false}
                       className="ant-border-space"
                   />
@@ -292,6 +431,26 @@ const Tables = () => {
             <Option value="COMPANY">COMPANY</Option>
             <Option value="EMPLOYEE">EMPLOYEE</Option>
           </Select>
+        </Modal>
+        <Modal title="Create Category" visible={isCategoryModalVisible} onOk={handleCategoryCreate} onCancel={() => setIsCategoryModalVisible(false)}>
+          <Form layout="vertical">
+            <Form.Item label="Name">
+              <Input value={newCategory.name} onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })} />
+            </Form.Item>
+            <Form.Item label="Description">
+              <Input value={newCategory.description} onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })} />
+            </Form.Item>
+          </Form>
+        </Modal>
+        <Modal title="Update Category" visible={isUpdateCategoryModalVisible} onOk={handleUpdateCategoryOk} onCancel={handleUpdateCategoryCancel}>
+          <Form layout="vertical">
+            <Form.Item label="Name">
+              <Input value={selectedCategory?.name} onChange={(e) => setSelectedCategory({ ...selectedCategory, name: e.target.value })} />
+            </Form.Item>
+            <Form.Item label="Description">
+              <Input value={selectedCategory?.description} onChange={(e) => setSelectedCategory({ ...selectedCategory, description: e.target.value })} />
+            </Form.Item>
+          </Form>
         </Modal>
       </>
   );
